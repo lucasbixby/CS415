@@ -4,7 +4,6 @@
 #include <string.h>
 #include <ctype.h>
 
-// static function allows us to 
 static char* trim_whitespace(char* s)
 // formats the string by removeing leading and trailing whitespace.
 {
@@ -29,14 +28,12 @@ static char* trim_whitespace(char* s)
 
     *(end + 1) = '\0';
 
-    // return the cleaned string.
     return s;
 
 }
 
 command_line str_tokenize(char* str)
-// splits individual commands seperated by a ";" into a dynamically allocated array 
-// and records how many commands were found. 
+// tokenizes an input string of commands seperated by ";"
 {
     command_line result;
     char* buffer; 
@@ -127,7 +124,7 @@ command_line str_tokenize(char* str)
 }
 
 void free_command_line(command_line* control)
-// helper function to memory allocated in str_tokenize() to prevent memory leaks
+// helper function to clean-up memory allocated in str_tokenize() to prevent memory leaks
 {
     int i;
 
