@@ -1,0 +1,20 @@
+# Compiled binaries
+a.out
+*.o
+*.exe
+
+# Vim / Nano / editor swap files
+*.swp
+*.swo
+*.swx
+*~
+*.tmp
+
+# macOS junk
+.DS_Store
+
+# Backup files
+*.bak
+
+# Core dumps
+core
