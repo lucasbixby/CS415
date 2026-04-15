@@ -3,6 +3,8 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 void listDir()
 /*for the ls command*/
@@ -10,7 +12,7 @@ void listDir()
     // open the current working directory
     DIR *dir = opendir(".");
     if( dir == NULL ){
-        perror("ERROR: cound not open current directory");
+        perror("listDir");
         return;
     }
 
@@ -27,13 +29,26 @@ void listDir()
 void showCurrentDir()
 /*for the pwd command*/
 {
-    return;
+    // initialize a char buffer 
+    char buffer[1024];
+
+    // check if 
+    if (getcwd(buffer, sizeof(buffer)) == NULL) {
+        perror("showCurrentDir");
+        return;
+    }
+
+    write(STDOUT_FILENO, buffer, strlen(buffer));
+    write(STDOUT_FILENO, "\n", 1);
 }
 
 void makeDir(char *dirName)
 /*for the mkdir command*/
 {
-    return;
+    if ( mkdir(dirName, 0755) == -1){
+        perror("mkdir");
+        return;
+    }
 }
 
 void changeDir(char *dirName)
