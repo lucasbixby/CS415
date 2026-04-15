@@ -1,10 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <string.h>
 
 void listDir()
 /*for the ls command*/
 {
-    return;
+    // open the current working directory
+    DIR *dir = opendir(".");
+    if( dir == NULL ){
+        perror("ERROR: cound not open current directory");
+        return;
+    }
+
+    // print contents 
+    struct dirent *entry ;
+    while((entry = readdir(dir)) != NULL ) {
+        write(STDOUT_FILENO, entry->d_name, strlen(entry->d_name));
+        write(STDOUT_FILENO, "\n", 1);
+    }
+
+    closedir(dir);
 }
 
 void showCurrentDir()
