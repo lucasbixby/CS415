@@ -11,9 +11,55 @@ int stringParseTest(){
     command_line commands = str_tokenize(input_string);
 
     for( unsigned int i=0; i < commands.num_token; i++) {
-        printf("%s\t", commands.command_list[i]);
+        printf("%s\n", commands.command_list[i]);
     }
+    printf("\n");
 
+    return 0;
+}
+
+int commandsTest() {
+
+    // test ls
+    listDir();
+    printf("\n");
+
+    // test pwd
+    showCurrentDir();
+    printf("\n");
+
+    // test mkdir 
+    char *dirName = "new_dir" ;
+    makeDir(dirName);
+    listDir();
+    printf("\n");
+
+    // test cd
+    changeDir(dirName);
+    showCurrentDir();
+    printf("\n");
+
+    // test cp
+    copyFile("/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/input-2.txt", 
+    "/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/new_dir");
+    listDir();
+    printf("\n");
+
+    // test mv
+    moveFile("/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/test_direct_1/test_text.txt",
+    "/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/test_direct_2");
+
+    // test rm
+    changeDir("/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/test_direct_2");
+    listDir();
+    printf("\n");
+    deleteFile("trash.txt");
+    listDir();
+    printf("\n");
+
+    // test cat
+    displayFile("/home/users/lbixby/lucas_bixby_homework/lucas_bixby_assignments/CS415/project_1/example-output-1.txt");
+    printf("\n");
     return 0;
 }
 
@@ -21,25 +67,9 @@ int main(int argc, char *argv[])
 {
     // fisrt we must check what mode our program is started in 
 
-    if (stringParseTest() == 0) {
-        printf("\nstring parse success\n");
-    } else {
-        printf("\nstring parse failure\n");
-    }
+    stringParseTest();
 
-    /* 
-    if(argc > 1)
-    {
-        if(argc == 3)
-        {
-           // in file mode -> ./psudo-shell -f filename.txt 
-
-        } else {
-            fprintf(stderr, "Error! incorrect number of file mode arguments");
-            return 1;
-        }
-    }
-    */
+    commandsTest();
 
     return 0;
 }
