@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
+#include <libgen.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -54,29 +57,87 @@ void makeDir(char *dirName)
 void changeDir(char *dirName)
 /*for the cd command*/
 {
-    return;
+    if ( chdir( dirName) == -1){
+        perror("changeDir");
+        return;
+    }
 }
 
 void copyFile(char *sourcePath, char *destinationPath) 
 /*for the cp command*/
 {
-    return;
+    // open source file
+    int source = open(sourcePath, O_RDONLY);
+    if ( source == -1){
+        perror("open source");
+        return;
+    }
+
+    char *fileName = basename(sourcePath);
+    char fullPath[1024];
+    snprintf(fullPath, sizeof(fullPath), "%s/%s", destinationPath, fileName);
+
+    int dst = open(fullPath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (dst == -1) {
+        perror("open destinaiton");
+        close(source);
+        return;
+    }
+
+    char buffer[1024];
+    ssize_t bytesRead;
+
+    while ((bytesRead = read(source, buffer, sizeof(buffer))) > 0) {
+        if (write(dst, buffer, bytesRead) != bytesRead) {
+            perror("write");
+            close(source);
+            close(dst);
+            return;
+        }
+    }
+
+    if (bytesRead == -1) {
+        perror("read");
+    }
+
+    close(source);
+    close(dst);
 }
 
 void moveFile(char *sourcePath, char *destinationPath)
 /*for the mv command*/
 {
-    return;
+    copyFile(sourcePath, destinationPath);
+
+    if (remove(sourcePath) == -1) {
+        perror("remove");
+        return;
+    }
 }
 
 void deleteFile(char *filename)
 /*for the rm command*/
 {
-    return;
+    remove(filename);
 }
 
 void displayFile(char *filename)
 /*for the cat command*/
 {
-    return;
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1){
+        perror("open");
+        return;
+    }
+    char buffer[1024];
+    ssize_t bytesRead;
+
+    while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0){
+        write(STDOUT_FILENO, buffer, bytesRead);
+    }
+    write(STDOUT_FILENO, "\n", 1);
+
+    if (bytesRead == -1){
+        perror("read");
+    }
 }
