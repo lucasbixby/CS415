@@ -15,6 +15,7 @@ int stringParseTest(){
     }
     printf("\n");
 
+    free_command_line(&commands);
     return 0;
 }
 
