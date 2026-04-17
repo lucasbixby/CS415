@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -g
 
-program: main.o string_parser.o command.o
-	$(CC) $(CFLAGS) main.o string_parser.o command.o -o program
+pseudo-shell: main.o string_parser.o command.o
+	$(CC) $(CFLAGS) main.o string_parser.o command.o -o pseudo-shell
 
 main.o: main.c string_parser.h command.h
 	$(CC) $(CFLAGS) -c main.c -o main.o 
@@ -14,4 +14,4 @@ command.o: command.c command.h
 	$(CC) $(CFLAGS) -c command.c -o command.o
 
 clean:
-	rm -f *.o program
+	rm -f *.o pseudo-shell
