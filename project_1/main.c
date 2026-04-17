@@ -80,14 +80,6 @@ char **parse_args(char* command_string, int *count)
 {
     // parse the whitespace from the command line to get elments 
 
-    /*
-    Dev note:
-
-        make sure that this helper function handles strings that
-    have length 0 ( no arguments ). 
-    
-    */
-
     int capacity = 10;
     char **args = malloc(capacity * sizeof(char *));
     if (args == NULL) {
@@ -120,15 +112,6 @@ char **parse_args(char* command_string, int *count)
 int fileMode(char *fileName) {
     // check to see if the provided file name is valid 
 
-    /*
-    Dev note:
-
-        most of the implementation for fileMode is complete
-    next step is to make the output write to the output.txt 
-    file. right now, the file is opened but never used. 
-    
-    */
-
     FILE *input_file = fopen(fileName, "r");
     if (input_file == NULL) {
         perror("fopen input");
@@ -157,7 +140,6 @@ int fileMode(char *fileName) {
         command_line cmd = str_tokenize(line);
 
         for (int i = 0; i < cmd.num_token; i++) {
-            // fprintf(output_file, "command[%d]: %s\n", i, cmd.command_list[i]);
             
             int arg_count; 
             char **args = parse_args(cmd.command_list[i], &arg_count);
@@ -224,7 +206,6 @@ int fileMode(char *fileName) {
                 displayFile(args[1]);
 
             } else {
-                // comamnd is invalid
                 dprintf(STDOUT_FILENO, "Error! Unrecognized command: %s \n", args[0]);
             }
 
@@ -249,6 +230,17 @@ int fileMode(char *fileName) {
 }
 
 int interactiveMode() {
+
+    /*
+    Dev Note:
+        this is the last step that need to be completed, should 
+    be easier to implement than the fileMode function. you just 
+    need to implement a main loop that checks for sidin inputs 
+    which are then compaired to the list of commands. if exit is 
+    entered; exit the main loop.
+        make sure that the output for the command match the expected 
+    output in the project description. 
+    */
 
     return 0; 
 }
