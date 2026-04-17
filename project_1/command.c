@@ -23,9 +23,10 @@ void listDir()
     struct dirent *entry ;
     while((entry = readdir(dir)) != NULL ) {
         write(STDOUT_FILENO, entry->d_name, strlen(entry->d_name));
-        write(STDOUT_FILENO, "\n", 1);
+        write(STDOUT_FILENO, " ", 1);
     }
 
+    write(STDOUT_FILENO, "\n", 1);
     closedir(dir);
 }
 
@@ -49,7 +50,8 @@ void makeDir(char *dirName)
 /*for the mkdir command*/
 {
     if ( mkdir(dirName, 0755) == -1){
-        perror("mkdir");
+        char* error_str = "Directory already exists!\n";
+        write(STDOUT_FILENO, error_str , strlen(error_str));
         return;
     }
 }
@@ -73,15 +75,27 @@ void copyFile(char *sourcePath, char *destinationPath)
         return;
     }
 
-    char *fileName = basename(sourcePath);
-    char fullPath[1024];
-    snprintf(fullPath, sizeof(fullPath), "%s/%s", destinationPath, fileName);
+    struct stat st;
+    int dst;
 
-    int dst = open(fullPath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (dst == -1) {
-        perror("open destinaiton");
-        close(source);
-        return;
+    if (stat(destinationPath, &st) != -1 && S_ISDIR(st.st_mode)) {
+        char *fileName = basename(sourcePath);
+        char fullPath[1024];
+        snprintf(fullPath, sizeof(fullPath), "%s/%s", destinationPath, fileName);
+
+        dst = open(fullPath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (dst == -1) {
+            perror("open destinaiton");
+            close(source);
+            return;
+        }
+    } else {
+        dst = open(destinationPath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (dst == -1) {
+            perror("open destinaiton");
+            close(source);
+            return;
+        }
     }
 
     char buffer[1024];
@@ -107,11 +121,26 @@ void copyFile(char *sourcePath, char *destinationPath)
 void moveFile(char *sourcePath, char *destinationPath)
 /*for the mv command*/
 {
-    copyFile(sourcePath, destinationPath);
+    struct stat st;
 
-    if (remove(sourcePath) == -1) {
-        perror("remove");
-        return;
+    if (stat(destinationPath, &st) == -1) {
+        // destinationPath does not exist: treat as rename
+        if (rename(sourcePath, destinationPath) == -1) {
+            perror("rename");
+        }
+    }
+    else if (S_ISDIR(st.st_mode)) {
+        // move into directory
+        copyFile(sourcePath, destinationPath);
+        if (remove(sourcePath) == -1) {
+            perror("remove");
+        }
+    }
+    else {
+        // dest exists and is file: overwrite
+        if (rename(sourcePath, destinationPath) == -1) {
+            perror("rename");
+        }
     }
 }
 
@@ -140,4 +169,6 @@ void displayFile(char *filename)
     if (bytesRead == -1){
         perror("read");
     }
+
+    close(fd);
 }
