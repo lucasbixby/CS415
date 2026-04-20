@@ -1,3 +1,13 @@
+/*
+* Description: Project 1 commands. Contains functions 
+*			   to the commands listed in the project 
+*              description and defined in command.h .
+*
+* Author: Lucas Bixby
+*
+* Date: 04/19/2026
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +18,7 @@
 #include <libgen.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
 
 void listDir()
 /*for the ls command*/

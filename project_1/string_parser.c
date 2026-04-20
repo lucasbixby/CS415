@@ -1,3 +1,13 @@
+/*
+* Description: Project 1 string parser. Contains functions 
+*			   to parse and tokenize the incomming command line
+*              from a file in fileMode or input in interactive mode.
+*
+* Author: Lucas Bixby
+*
+* Date: 04/19/2026
+*/
+
 #include "string_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
