@@ -1,11 +1,11 @@
 /*
 * Description: Project 1 main file. Contains functionality to handle
-*			   fileMode and Interactive mode. Along with helper functions 
+*			   file_mode and interactive_mode. Along with helper functions 
 *              for the testing of command.c and string_parser.c . 
 *
 * Author: Lucas Bixby
 *
-* Date: 04/19/2026
+* Date: 04/20/2026 ( last modified )
 */
 
 #include <stdio.h>
@@ -17,20 +17,9 @@
 #include "string_parser.h"
 #include "command.h"
 
-/*
-    Dev Note:
-        There can be some cleanup for the command handling 
-    in both fileMode and interactive mode. I sugest making a 
-    helper function with an input of args, which then compares 
-    the string an writes the output based on the result. 
-        because the block of conditional statements are 
-    identical in both fileMode and Interactive mode we can improve
-    modularity my conatining them in a seprate helper function. 
-*/
-
 // test functions 
-int stringParseTest(){
-
+int stringParseTest()
+{
     char* input_string = "pwd ; mkdir test ; cd test sfjlksagjlks;ls; pwd; cd .. ; cd test ; pwd cp ../input.txt . ; ls ; cat input.txt mv input.txt del.txt ; pwd ; ls rm del.txt ; ls cd .. ; pwd ls";
 
     command_line commands = str_tokenize(input_string);
@@ -44,8 +33,8 @@ int stringParseTest(){
     return 0;
 }
 
-int commandsTest() {
-
+int commandsTest() 
+{
     // test ls
     listDir();
     printf("\n");
@@ -89,7 +78,9 @@ int commandsTest() {
     return 0;
 }
 
-int runTests() {
+int runTests() 
+{
+    // execute tests
 
     stringParseTest();
     commandsTest();
@@ -130,9 +121,83 @@ char **parse_args(char* command_string, int *count)
     return args;
 }
 
-int fileMode(char *fileName) {
+int handle_command(char **args, int arg_count) 
+{
+    // handle the incomming commands parsed into a collection of arguments
 
-    // check to see if the provided file name is valid 
+    if( strcmp(args[0], "ls") == 0 ) {
+        if (arg_count != 1) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+        }
+        listDir();
+    } else if( strcmp(args[0], "pwd") == 0 ) {
+        if (arg_count != 1) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+            }
+        showCurrentDir();
+
+    } else if( strcmp(args[0], "mkdir") == 0 ) {
+        if (arg_count != 2) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+        }
+        makeDir(args[1]);
+
+    } else if( strcmp(args[0], "cd") == 0 ) {
+        if (arg_count != 2) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+        }
+        changeDir(args[1]);
+
+    } else if( strcmp(args[0], "cp") == 0 ) {
+        if (arg_count != 3) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+            }
+            copyFile(args[1], args[2]);
+
+    } else if( strcmp(args[0], "mv") == 0 ) {
+        if (arg_count != 3) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+            }
+            moveFile(args[1], args[2]);
+
+    } else if( strcmp(args[0], "rm") == 0 ) {
+        if (arg_count != 2) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+            }
+            deleteFile(args[1]);
+
+    } else if( strcmp(args[0], "cat") == 0 ) {
+        if (arg_count != 2) {
+            dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
+            free(args);
+            return -1;
+            }
+            displayFile(args[1]);
+
+    } else {
+        dprintf(STDOUT_FILENO, "Error! Unrecognized command: %s \n", args[0]);
+    }
+
+    return 0;
+}
+
+int file_mode(char *fileName) 
+{
+    // first check to see if the provided file name is valid 
     FILE *input_file = fopen(fileName, "r");
     if (input_file == NULL) {
         perror("fopen input");
@@ -170,77 +235,10 @@ int fileMode(char *fileName) {
                 continue;
             }
 
-            if( strcmp(args[0], "ls") == 0 ) {
-                if (arg_count != 1) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                listDir();
-
-            } else if( strcmp(args[0], "pwd") == 0 ) {
-                if (arg_count != 1) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                showCurrentDir();
-
-            } else if( strcmp(args[0], "mkdir") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                makeDir(args[1]);
-
-            } else if( strcmp(args[0], "cd") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                changeDir(args[1]);
-
-            } else if( strcmp(args[0], "cp") == 0 ) {
-                if (arg_count != 3) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                copyFile(args[1], args[2]);
-
-            } else if( strcmp(args[0], "mv") == 0 ) {
-                if (arg_count != 3) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                moveFile(args[1], args[2]);
-
-            } else if( strcmp(args[0], "rm") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                deleteFile(args[1]);
-
-            } else if( strcmp(args[0], "cat") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                displayFile(args[1]);
-
-            } else {
-                dprintf(STDOUT_FILENO, "Error! Unrecognized command: %s \n", args[0]);
+            if (handle_command(args, arg_count) != -1) {
+                free(args);
             }
-
-            free(args);
         }
-
         free_command_line(&cmd);
     }
 
@@ -258,7 +256,7 @@ int fileMode(char *fileName) {
     return 0;
 }
 
-int interactiveMode() {
+int interactive_mode() {
 
     char *line = NULL;
     size_t len = 0;
@@ -290,85 +288,12 @@ int interactiveMode() {
             int arg_count; 
             char **args = parse_args(cmd.command_list[i], &arg_count);
 
-            if (arg_count == 0) {
+            if (handle_command(args, arg_count) != -1) {
                 free(args);
-                continue;
             }
-
-            if( strcmp(args[0], "ls") == 0 ) {
-                if (arg_count != 1) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                listDir();
-
-            } else if( strcmp(args[0], "pwd") == 0 ) {
-                if (arg_count != 1) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                showCurrentDir();
-
-            } else if( strcmp(args[0], "mkdir") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                makeDir(args[1]);
-
-            } else if( strcmp(args[0], "cd") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                changeDir(args[1]);
-
-            } else if( strcmp(args[0], "cp") == 0 ) {
-                if (arg_count != 3) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                copyFile(args[1], args[2]);
-
-            } else if( strcmp(args[0], "mv") == 0 ) {
-                if (arg_count != 3) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                moveFile(args[1], args[2]);
-
-            } else if( strcmp(args[0], "rm") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                deleteFile(args[1]);
-
-            } else if( strcmp(args[0], "cat") == 0 ) {
-                if (arg_count != 2) {
-                    dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
-                    free(args);
-                    continue;
-                }
-                displayFile(args[1]);
-
-            } else {
-                dprintf(STDOUT_FILENO, "Error! Unrecognized command: %s \n", args[0]);
-            }
-
-            free(args);
         }
-
         free_command_line(&cmd);
     }
-
     free(line);
     return 0; 
 }
@@ -380,14 +305,14 @@ int main(int argc, char *argv[])
 
     // first we must check what mode our program has started in 
     if ( argc == 1 ) {
-         interactiveMode();
+        interactive_mode();
     }
     else if ( argc == 3 ) {
         if ( strcmp(argv[1], "-f") != 0 ){
             fprintf(stderr, "Usage: ./psudo-shell -f <filename>\n");
             return -1; 
         }
-        fileMode(argv[2]);
+        file_mode(argv[2]);
     } else {
         // there is an invalid number of arguments -> show usage
         fprintf(stderr, "Usage: ./psudo-shell [-f filename]\n");
