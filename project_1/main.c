@@ -16,9 +16,9 @@
 #include <sys/types.h>
 #include "string_parser.h"
 #include "command.h"
-
-// test functions 
+ 
 int stringParseTest()
+//helper function for the testing of string_parser.c
 {
     char* input_string = "pwd ; mkdir test ; cd test sfjlksagjlks;ls; pwd; cd .. ; cd test ; pwd cp ../input.txt . ; ls ; cat input.txt mv input.txt del.txt ; pwd ; ls rm del.txt ; ls cd .. ; pwd ls";
 
@@ -34,6 +34,7 @@ int stringParseTest()
 }
 
 int commandsTest() 
+// helper function for the testing of command.c
 {
     // test ls
     listDir();
@@ -79,9 +80,8 @@ int commandsTest()
 }
 
 int runTests() 
+// execute tests
 {
-    // execute tests
-
     stringParseTest();
     commandsTest();
 
@@ -89,9 +89,8 @@ int runTests()
 }
 
 char **parse_args(char* command_string, int *count) 
+// parse the whitespace from the command line to get elments 
 {
-    // parse the whitespace from the command line to get elments 
-
     int capacity = 10;
     char **args = malloc(capacity * sizeof(char *));
     if (args == NULL) {
@@ -122,9 +121,8 @@ char **parse_args(char* command_string, int *count)
 }
 
 int handle_command(char **args, int arg_count) 
+// handle the incomming commands parsed into a collection of arguments
 {
-    // handle the incomming commands parsed into a collection of arguments
-
     if( strcmp(args[0], "ls") == 0 ) {
         if (arg_count != 1) {
             dprintf(STDOUT_FILENO, "Error! Unsupported parameters for command: %s \n", args[0]);
@@ -196,6 +194,7 @@ int handle_command(char **args, int arg_count)
 }
 
 int file_mode(char *fileName) 
+// logic for executing program in file mode 
 {
     // first check to see if the provided file name is valid 
     FILE *input_file = fopen(fileName, "r");
@@ -256,8 +255,9 @@ int file_mode(char *fileName)
     return 0;
 }
 
-int interactive_mode() {
-
+int interactive_mode() 
+// logic for executing program in interactive mode 
+{
     char *line = NULL;
     size_t len = 0;
     ssize_t nread;
