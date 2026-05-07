@@ -1,14 +1,15 @@
 #ifndef MCP_H
 #define MCP_H
 
+#include <stdio.h>
+#include <signal.h>
+
 typedef struct
 {
     char** command;         /* Array of individual arguments separated by ' ' */
     int num_arguments;      /* Number of arguments found in a single command */
     char *raw_line; 
 } command_line;
-
-//command_line* extract_commands(char *workload_file, int *num_commands);
 
 int count_lines(FILE *fp) 
 // count the lines in an input file 
@@ -133,6 +134,28 @@ command_line* extract_commands(char* workload_file, int *num_commands)
     *num_commands = i;
 
     return workload; 
+}
+
+void setup_signals(sigset_t *set)
+{
+    sigemptyset(set);
+    sigaddset(set, SIGUSR1);
+
+    if (sigprocmask(SIG_BLOCK, set, NULL) < 0) {
+        perror("sigprocmask");
+        exit(1);
+    }
+}
+
+void wait_for_signal(sigset_t *set)
+// listen for signals before executing 
+{
+    int sig;
+
+    if (sigwait(set, &sig) != 0) {
+        perror("sigwait");
+        exit(1);
+    }
 }
 
 #endif
