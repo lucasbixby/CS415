@@ -55,13 +55,15 @@ void handle_workload(command_line* workload, int num_commands, sigset_t *set)
         }
 
         if (pid == 0) {
-            // in child process:
+            // child waits until parent sends SIGUSR1
             wait_for_signal(set);
 
-            // replace the child with the request command 
+            // child becomes workload program 
             execvp(workload[i].command[0], workload[i].command);
 
-            perror(workload[i].command[0]);
+            perror("Execvp");
+            free(pids);
+            free_workload(workload, num_commands);
             exit(1);
         }
 
@@ -73,6 +75,20 @@ void handle_workload(command_line* workload, int num_commands, sigset_t *set)
     // send SIGUSR1 to each child so it can continue to execvp()
     for (int i = 0; i < launched; i++) { 
         kill(pids[i], SIGUSR1);
+    }
+
+    sleep(1);
+
+    for (int i = 0; i < launched; i++) {
+        kill(pids[i], SIGSTOP);
+    }
+
+    for (int i = 0; i < launched; i++) {
+        waitpid(pids[i], NULL, WUNTRACED);
+    }
+
+    for (int i = 0; i < launched; i++) {
+        kill(pids[i], SIGCONT);
     }
 
     for (int i = 0; i < launched; i++) { 
@@ -101,6 +117,8 @@ int main(int argc, char* argv[])
         setup_signals(&set);
 
         handle_workload(workload, num_commands, &set);
+
+        free_workload(workload, num_commands);
 
     } else {
         // there is an invalid number of arguments -> show usage
