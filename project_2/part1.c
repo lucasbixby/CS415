@@ -54,12 +54,12 @@ void handle_workload(command_line* workload, int num_commands)
         }
 
         if (pid == 0) {
-            // in child process:
-
             // replace the child with the request command 
             execvp(workload[i].command[0], workload[i].command);
 
-            perror(workload[i].command[0]);
+            perror("Execvp");
+            free(pids);
+            free_workload(workload, num_commands);
             exit(1);
         }
 
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     // first we must check what mode our program has started in 
     if ( argc == 3 ) {
         if ( strcmp(argv[1], "-f") != 0 ){
-            fprintf(stderr, "Usage: ./MPC -f <workload>\n");
+            fprintf(stderr, "Usage: ./part1 -f <workload>\n");
             return -1; 
         }
         // extract the commands from the workload file here:
@@ -92,9 +92,11 @@ int main(int argc, char* argv[])
         command_line* workload = extract_commands(argv[2], &num_commands);
         handle_workload(workload, num_commands);
 
+        free_workload(workload, num_commands);
+
     } else {
         // there is an invalid number of arguments -> show usage
-        fprintf(stderr, "Usage: ./MPC [-f workload]\n");
+        fprintf(stderr, "Invalid use: incorrect number of parameters\n");
         return -1; 
     }
 
