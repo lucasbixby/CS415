@@ -11,13 +11,6 @@
 // 2.)  implement the needed mechanism for the MCP to signal a running process to stop
 //      (using the SIGSTOPsignal) and then to continue it again (using the SIGCONTsignal). 
 
-/*
-DEV NOTE:
-    finished implementing forked processes to wait for SIGUSR1 to execute. Next work on step 2 
-    where you will need to allow the MCP to stop a running process, along with letting it 
-    continue a process, using SIGSTOP and SIGCONT . 
-*/
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
