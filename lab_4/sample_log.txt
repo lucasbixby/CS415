@@ -1,0 +1,47 @@
+CS415 Lab 4 - Processes and exec
+
+Name: Abc Student
+Date: 05/08/2026
+Environment: IX-Dev (example)
+
+Submitted files:
+1. lab4.c
+2. iobound.c
+3. Makefile
+4. log.txt
+5. Screenshot of compile + system information
+
+Build steps:
+$ make clean
+$ make
+Result:
+- lab4 compiled successfully
+- iobound compiled successfully
+
+Run tests:
+$ ./lab4 1
+top command: : No such file or directory
+Process: 51001 - Begining to write to file.
+Process: 51001 - Finished.
+
+$ ./lab4 3
+top command: : No such file or directory
+Process: 51021 - Begining to write to file.
+Process: 51022 - Begining to write to file.
+Process: 51023 - Begining to write to file.
+Process: 51022 - Finished.
+Process: 51021 - Finished.
+Process: 51023 - Finished.
+
+$ ./lab4 5
+Result:
+- 5 child processes were created.
+- all iobound processes completed.
+
+Process monitoring:
+- Opened another terminal and ran: top
+- Observed iobound processes during execution of ./lab4
+
+Notes:
+- script_print(pid_t* pid_ary, int size) is included as required.
+- On IX-Dev, "top command: : No such file or directory" is expected and acceptable per lab instructions.
