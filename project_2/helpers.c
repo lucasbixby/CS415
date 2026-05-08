@@ -1,9 +1,9 @@
 /*
-* Description: Project 2 [ helper fucntions ] for MPC v2.0
+* Description: Project 2 [ helper fucntions ] for MPC v3.0
 *
 * Author: Lucas Bixby
 *
-* Date: 05/07/2026 ( last modified )
+* Date: 05/08/2026 ( last modified )
 */
 
 /*  handle all of the helper functions for:
@@ -11,6 +11,7 @@
     -   parsing
     -   signals
     -   memory clean-up
+    -   process-schedular 
 */
 
 #include <stdio.h>
@@ -182,5 +183,56 @@ void wait_for_signal(sigset_t *set)
     if (sigwait(set, &sig) != 0) {
         perror("sigwait");
         exit(1);
+    }
+}
+
+void enqueue(pid_t *pids, int active, pid_t id)
+{   
+    pids[active] = id; 
+}
+
+pid_t dequeue(pid_t *pids, int active)
+{
+    pid_t removed = pids[0];
+    for ( int i=0; i < active - 1; i++) {
+        pids[i] = pids[i+1];
+    }
+    pids[active - 1] = -1;
+
+    return removed; 
+}
+
+void alarm_handler(int sig){}
+
+void process_schedular(pid_t *pids, int launched)
+// process schedular logic
+{
+    // takes in the array of process ids and handles each one in queue order untill none remain
+
+    int active = launched; 
+
+    while ( active > 0 ) {
+        pid_t current = dequeue(pids, active);
+
+        kill(current, SIGCONT);
+        alarm(1);
+        pause();
+
+        kill(current, SIGSTOP);
+
+        int status;
+        pid_t result = waitpid(current, &status, WNOHANG);
+
+        if ( result == 0 ) {
+            // process still active -> put back into the queue 
+            enqueue(pids, active -1, current);
+        }
+        else if ( result == current ) {
+            // process finished 
+            active--; 
+        } else {
+            perror("waitpid");
+            active--;
+        }
     }
 }
