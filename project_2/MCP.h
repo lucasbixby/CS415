@@ -23,4 +23,8 @@ void setup_signals(sigset_t *set);
 
 void wait_for_signal(sigset_t *set);
 
+void process_schedular(pid_t *pids, int launched);
+
+void alarm_handler(int sig);
+
 #endif
