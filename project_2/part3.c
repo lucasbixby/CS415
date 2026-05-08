@@ -3,14 +3,49 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/07/2026 ( last modified )
+* Date: 05/08/2026 ( last modified )
 */
-
-// 1.)  
 
 /*
     DEV NOTE:
-        pick up here, you will now need to implement the MCP scheduling process
+
+        in part 3 we now need to implement a schedular that allows each program to run for 1 
+        seccond, then stop to choose the next program to execute then start that one. We need 
+        to use the alarm(2) system call to set a timer for each child process. Addtionally the 
+        schedular waits for the SIGALRM before choosing the next process to execute. 
+        
+        strategy:
+
+            because we now have a way to stop and continue child processes, we can implement that within 
+            another helper function to : start process -> stop after 1 time interval -> choose next 
+            process to execute -> start process. 
+
+        How will we implement this?
+
+            what if we create a helper function called process_schedular() that opperates on a 
+            queue of child processes. Every time we fork() in the handle_workload() function 
+            we add the child process to the queue in the process_schedular() handler. Inside the
+            process_schedular() we will have a while loop that will loop over the waiting process
+            queue and execute each CP ( child process ) for the one second before stoping it ->
+            dequing it -> and enqueueing it, if it is still not finnished. the while loop continues 
+            untill there are no more CPs in the process queue. Therefore we can implement the 
+            process scheduling using a round-robbin technique. 
+
+        implementation flow:
+
+            fork all children
+            children wait for SIGUSR1
+            parent sends SIGUSR1 so children exec
+            parent immediately stops all children
+            choose first process
+            SIGCONT first process
+            alarm(1)
+
+            when SIGALRM happens:
+                SIGSTOP current process
+                choose next unfinished process
+                SIGCONT next process
+                alarm(1)
 */
 
 #include <stdio.h>
@@ -78,17 +113,9 @@ void handle_workload(command_line* workload, int num_commands, sigset_t *set)
         kill(pids[i], SIGSTOP);
     }
 
-    for (int i = 0; i < launched; i++) {
-        waitpid(pids[i], NULL, WUNTRACED);
-    }
-
-    for (int i = 0; i < launched; i++) {
-        kill(pids[i], SIGCONT);
-    }
-
-    for (int i = 0; i < launched; i++) { 
-        waitpid(pids[i], NULL, 0);
-    }
+    // schedular logic 
+    signal(SIGALRM, alarm_handler);
+    process_schedular(pids, launched);
 
     free(pids);
 }
