@@ -1,9 +1,9 @@
 /*
-* Description: Project 2 [ helper fucntions ] for MPC v3.0
+* Description: Project 2 [ helper fucntions ] for MPC v4.0
 *
 * Author: Lucas Bixby
 *
-* Date: 05/08/2026 ( last modified )
+* Date: 05/10/2026 ( last modified )
 */
 
 /*  handle all of the helper functions for:
@@ -11,7 +11,9 @@
     -   parsing
     -   signals
     -   memory clean-up
+    -   enqueue/dequeue
     -   process-schedular 
+    -   displaying process information
 */
 
 #include <stdio.h>
@@ -204,7 +206,7 @@ pid_t dequeue(pid_t *pids, int active)
 
 void alarm_handler(int sig){}
 
-void process_schedular(pid_t *pids, int launched)
+void process_schedular(pid_t *pids, int launched, int mode)
 // process schedular logic
 {
     // takes in the array of process ids and handles each one in queue order untill none remain
@@ -234,5 +236,112 @@ void process_schedular(pid_t *pids, int launched)
             perror("waitpid");
             active--;
         }
+
+        // when running part4 "mode" is 4, the table will only display when executing part4
+        if (mode == 4){
+            display_cycle_data(pids, active, active > 0 ? pids[0] : -1);
+        }
     }
+}
+
+long get_cpu_ms(pid_t pid)
+// return the cpu usage data for a process
+{
+    char path[256];
+    char comm[256];
+    char state;
+    unsigned long utime = 0;
+    unsigned long stime = 0;
+    long ticks = sysconf(_SC_CLK_TCK);
+
+    snprintf(path, sizeof(path), "/proc/%d/stat", pid);
+
+    FILE *fp = fopen(path, "r");
+    if (fp == NULL) {
+        return 0;
+    }
+
+    fscanf(fp,
+       "%*d %255s %c "
+       "%*s %*s %*s %*s %*s "
+       "%*s %*s %*s %*s "
+       "%lu %lu",
+       comm,
+       &state,
+       &utime,
+       &stime);
+
+    fclose(fp);
+
+    return ((utime + stime) * 1000) / ticks;
+}
+
+void display_cycle_data(pid_t *pids, int active, pid_t next_pid)
+// display the process information for each cycle 
+{
+    printf("\n");
+    printf("-----------------------------------------------------------------\n");
+    printf("%-10s %-16s %-18s %-10s %-10s\n",
+           "PID", "CMD", "STATE", "CPU(ms)", "MEM(KB)");
+    printf("-----------------------------------------------------------------\n");
+
+    for (int i = 0; i < active; i++) {
+        pid_t pid = pids[i];
+
+        char path[256];
+        char line[256];
+        char command[128] = "unknown";
+        char state[64] = "?";
+        long memory_kb = 0;
+        long cpu_ms = get_cpu_ms(pid);
+
+        // read the command name
+        snprintf(path, sizeof(path), "/proc/%d/comm", pid);
+        FILE *comm_fp = fopen(path, "r");
+
+        if (comm_fp != NULL) {
+            if (fgets(command, sizeof(command), comm_fp) != NULL) {
+                command[strcspn(command, "\n")] = '\0';
+            }
+            fclose(comm_fp);
+        }
+
+        // then read the state and memory usage
+        snprintf(path, sizeof(path), "/proc/%d/status", pid);
+        FILE *status_fp = fopen(path, "r");
+
+        if (status_fp != NULL) {
+            while (fgets(line, sizeof(line), status_fp) != NULL) {
+                if (strncmp(line, "State:", 6) == 0) {
+                    sscanf(line, "State: %63[^\n]", state);
+                }
+
+                if (strncmp(line, "VmRSS:", 6) == 0) {
+                    sscanf(line, "VmRSS: %ld", &memory_kb);
+                }
+            }
+
+            fclose(status_fp);
+        }
+
+        // print the formatted data 
+        printf("%-10d %-16s %-18s %-10ld %-10ld\n",
+               pid,
+               command,
+               state,
+               cpu_ms,
+               memory_kb);
+    }
+
+    printf("-----------------------------------------------------------------\n");
+    printf("Current scheduler decision:\n");
+
+    if (next_pid > 0) {
+        printf("-> Next process: %d\n", next_pid);
+    } else {
+        printf("-> Next process: none\n");
+    }
+
+    printf("-----------------------------------------------------------------\n");
+    fflush(stdout);
 }
