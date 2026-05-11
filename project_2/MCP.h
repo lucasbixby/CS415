@@ -23,8 +23,12 @@ void setup_signals(sigset_t *set);
 
 void wait_for_signal(sigset_t *set);
 
-void process_schedular(pid_t *pids, int launched);
+void process_schedular(pid_t *pids, int launched, int mode);
 
 void alarm_handler(int sig);
+
+long get_cpu_ms(pid_t pid);
+
+void display_cycle_data(pid_t *pids, int active, pid_t next_pid);
 
 #endif
