@@ -1,11 +1,10 @@
 CC = gcc
 CFLAGS = -Wall -g
 
-all: part1 part2 part3 iobound cpubound
+all: part1 part2 part3 part4 
 
 # -----------------------
 # Part 1
-# -----------------------
 
 part1: part1.o helpers.o
 	$(CC) $(CFLAGS) part1.o helpers.o -o part1
@@ -15,7 +14,6 @@ part1.o: part1.c MCP.h
 
 # -----------------------
 # Part 2
-# -----------------------
 
 part2: part2.o helpers.o
 	$(CC) $(CFLAGS) part2.o helpers.o -o part2
@@ -25,7 +23,6 @@ part2.o: part2.c MCP.h
 
 # -----------------------
 # Part 3
-# -----------------------
 
 part3: part3.o helpers.o
 	$(CC) $(CFLAGS) part3.o helpers.o -o part3
@@ -34,21 +31,22 @@ part3.o: part3.c MCP.h
 	$(CC) $(CFLAGS) -c part3.c -o part3.o
 
 # -----------------------
-# Workload programs
+# Part 4
+
+part4: part4.o helpers.o
+	$(CC) $(CFLAGS) part4.o helpers.o -o part4
+
+part4.o: part4.c MCP.h
+	$(CC) $(CFLAGS) -c part4.c -o part4.o
+
 # -----------------------
+# Workload programs
 
 helpers.o: helpers.c MCP.h
 	$(CC) $(CFLAGS) -c helpers.c -o helpers.o
 
-iobound: iobound.c
-	$(CC) $(CFLAGS) iobound.c -o iobound
-
-cpubound: cpubound.c
-	$(CC) $(CFLAGS) cpubound.c -o cpubound
-
 # -----------------------
 # Clean
-# -----------------------
 
 clean:
-	rm -f *.o part1 part2 part3 iobound cpubound
+	rm -f *.o part1 part2 part3 part4 
