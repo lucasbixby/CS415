@@ -3,22 +3,15 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/08/2026 ( last modified )
+* Date: 05/10/2026 ( last modified )
 */
 
 /*
     DEV NOTE:
 
-        Pick up here, where next we will need to provide information on each child 
-        process using /proc, extract relevent information from the table and use it
-        to decide on which process to schedule next, allowing the process_schedular()
-        function to be more efficiant. 
-
-    Implementation:
-
-        We should create a new helper fucntion that extract the relevent informaiton 
-        of a process, then we can send that information inside a new updated process 
-        schedular function named smart_process_schedular(). 
+        Pick up here, next we will need to provide information on each child 
+        process using /proc, extract relevent information from the table and 
+        display it in a formatted table in the console. 
 */
 
 #include <stdio.h>
@@ -88,7 +81,7 @@ void handle_workload(command_line* workload, int num_commands, sigset_t *set)
 
     // schedular logic 
     signal(SIGALRM, alarm_handler);
-    process_schedular(pids, launched);
+    process_schedular(pids, launched, 4);
 
     free(pids);
 }
