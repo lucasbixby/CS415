@@ -28,8 +28,6 @@ directory. This will generate the following object files and executables.
     - part2
     - part3
     - part4
-    - iobound
-    - cpubound
 
 Execute the program by using file mode: 
 
