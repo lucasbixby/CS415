@@ -3,7 +3,7 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/08/2026 ( last modified )
+* Date: 05/10/2026 ( last modified )
 */
 
 /*
@@ -27,7 +27,7 @@
             we add the child process to the queue in the process_schedular() handler. Inside the
             process_schedular() we will have a while loop that will loop over the waiting process
             queue and execute each CP ( child process ) for the one second before stoping it ->
-            dequing it -> and enqueueing it, if it is still not finnished. the while loop continues 
+            dequeueing it -> and enqueueing it, if it is still not finnished. the while loop continues 
             untill there are no more CPs in the process queue. Therefore we can implement the 
             process scheduling using a round-robbin technique. 
 
@@ -115,7 +115,7 @@ void handle_workload(command_line* workload, int num_commands, sigset_t *set)
 
     // schedular logic 
     signal(SIGALRM, alarm_handler);
-    process_schedular(pids, launched);
+    process_schedular(pids, launched, 3);
 
     free(pids);
 }
