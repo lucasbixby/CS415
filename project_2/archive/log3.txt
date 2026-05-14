@@ -1,0 +1,62 @@
+==2269616== Memcheck, a memory error detector
+==2269616== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2269616== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==2269616== Command: ./part3 -f input.txt
+==2269616== 
+test_script.sh
+tests
+Screenshot 2026-05-10 at 8.31.59 PM.png
+README.txt
+Project_2 - Description.pdf
+part4.o
+part4.c
+part4
+part3.o
+part3.c
+part3
+part2.o
+part2.c
+part2
+part1.o
+part1.c
+part1
+output.txt
+MCP.h
+Makefile_mint.txt
+Makefile
+log4.txt
+log3.txt
+log2.txt
+log1.txt
+iobound.c
+iobound
+input.txt
+helpers.o
+helpers.c
+cpubound.c
+cpubound
+..
+.
+Execvp: No such file or directory
+==2269619== 
+==2269619== HEAP SUMMARY:
+==2269619==     in use at exit: 0 bytes in 0 blocks
+==2269619==   total heap usage: 21 allocs, 21 frees, 9,667 bytes allocated
+==2269619== 
+==2269619== All heap blocks were freed -- no leaks are possible
+==2269619== 
+==2269619== For lists of detected and suppressed errors, rerun with: -s
+==2269619== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+Process: 2269620 - Beginning to write to file.
+Process: 2269620 - Finished.
+Process: 2269621 - Beginning calculation.
+Process: 2269621 - Finished.
+==2269616== 
+==2269616== HEAP SUMMARY:
+==2269616==     in use at exit: 0 bytes in 0 blocks
+==2269616==   total heap usage: 21 allocs, 21 frees, 9,667 bytes allocated
+==2269616== 
+==2269616== All heap blocks were freed -- no leaks are possible
+==2269616== 
+==2269616== For lists of detected and suppressed errors, rerun with: -s
+==2269616== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -1,0 +1,3 @@
+tests/./scriptA.sh
+tests/./scriptB.sh
+tests/./scriptC.sh
