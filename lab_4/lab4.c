@@ -1,8 +1,8 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <sys/types.h>
-#include<stdlib.h>
-#include<unistd.h>
-#include<sys/wait.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 void script_print (pid_t* pid_ary, int size);
 
@@ -11,7 +11,7 @@ int main(int argc,char*argv[])
 	if (argc != 2)
 	{
 		printf ("Wrong number of arguments\n");
-		exit (0);
+		exit(0);
 	}
 
 	/*
@@ -24,6 +24,49 @@ int main(int argc,char*argv[])
 	*	#4	wait for children processes to finish
 	*	#5	free any dynamic memory
 	*/
+
+	int n = atoi(argv[1]);
+
+	pid_t *pids = malloc(n * sizeof(pid_t));
+    if (pids == NULL) {
+        perror("malloc");
+        exit(1);
+    }
+
+	int launched = 0;
+
+    for( int i = 0; i < n; i++ ){
+
+        // create a new child process
+        pid_t pid = fork();
+        if (pid < 0) {
+            perror("fork");
+            continue;
+        }
+
+        if (pid == 0) {
+            char *args[] = {"./iobound", "-seconds", "10", NULL};
+			execvp(args[0], args);
+
+            perror("Execvp");
+            exit(1);
+        }
+
+        // store PID so we can wait for it later 
+        pids[launched] = pid;
+        launched++;
+    }
+
+	script_print(pids, launched);
+
+    // wait for all launched child processes
+    for (int i = 0; i < launched; i++) { 
+        int status;
+        waitpid(pids[i], &status, 0);
+    }
+
+    free(pids);
+
 
 	return 0;
 }
