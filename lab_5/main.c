@@ -24,17 +24,22 @@ int main(int argc, char* argv[])
 
 	pid_t *pid_ary = (pid_t *)malloc(sizeof(pid_t) * size);
 
-	char *args[] = {"./iobound", "-seconds", "4", 0};
 
 	// initialize sigset
 	sigset_t sigset;
 	int sig;
 
 	// create an empty sigset_t
+	sigemptyset(&sigset);
 
 	// use sigaddset() to add the SIGUSR1 signal to the set
+	sigaddset(&sigset, SIGUSR1);
 
 	// use sigprocmask() to add the signal set in the sigset for blocking
+	if (sigprocmask(SIG_BLOCK, &sigset, NULL) < 0) { 
+        perror("sigprocmask");
+        exit(1);
+    }
 
 	
 	for(int i = 0; i < size; i++)
@@ -45,14 +50,23 @@ int main(int argc, char* argv[])
 		if(pid_ary[i] == 0)
 		{
 			// print: Child Process: <pid> - Waiting for SIGUSR1…
+			printf("Child Process: <%d> - Waiting for SIGUSR1…\n", getpid());
 
 			// wait for the signal
+			if (sigwait(&sigset, &sig) != 0) {
+				perror("sigwait");
+				exit(1);
+			}
 			
 			// print: Child Process: <pid> - Received signal: SIGUSR1 - Calling exec().
+			printf("Child Process: <%d> - Received signal: SIGUSR1 - Calling exec().\n", getpid());
 
 			// call execvp with ./iobound like in lab 4
+			char *args[] = {"./iobound", "-seconds", "10", NULL};
+			execvp(args[0], args);
 
-			exit(0);
+			perror("Execvp");
+			exit(1);
 
 		}
 		else if (pid_ary[i] < 0) {
@@ -62,12 +76,16 @@ int main(int argc, char* argv[])
 	}
 	
 	// send SIGUSR1 
+	signaler(pid_ary, size, SIGUSR1);
 
 	// send SIGSTOP 
+	signaler(pid_ary, size, SIGSTOP);
 
 	// send SIGCONT
+	signaler(pid_ary, size, SIGCONT);
 
 	// send SIGINT
+	signaler(pid_ary, size, SIGINT); 
 
 
 
@@ -79,12 +97,15 @@ int main(int argc, char* argv[])
 void signaler(pid_t* pid_ary, int size, int signal)
 {
 	// sleep for three seconds
+	sleep(3);
 
 	for(int i = 0; i < size; i++)
 	{
 		// print: Parent process: <pid> - Sending signal: <signal> to child process: <pid>
+		printf("Parent process: <%d> - Sending signal: <%d> to child process: <%d>\n", getpid(), signal, pid_ary[i]);
 
 		// send the signal
+		kill(pid_ary[i], signal);
 
 
 	}
