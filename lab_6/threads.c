@@ -39,6 +39,11 @@ int main(int argc, char* argv[]) {
      *   - Check if malloc() failed. If it failed, print an error and exit.
      */
 
+    thread_ids = malloc(sizeof(pthread_t) * NUM_WORKERS);
+    if (thread_ids == NULL){
+        perror("malloc");
+        exit(1);
+    }
 
     /*
      * STEP 2: Initialize the mutex.
@@ -48,6 +53,7 @@ int main(int argc, char* argv[]) {
      *   - The second argument can be NULL for default mutex attributes.
      */
 
+    pthread_mutex_init(&counter_lock, NULL); 
 
     /*
      * STEP 3: Create an integer ID for each thread.
@@ -58,6 +64,14 @@ int main(int argc, char* argv[]) {
      *   - These IDs will be passed to the worker threads.
      */
 
+    int* numbers = malloc(sizeof(int) * NUM_WORKERS);
+    if (numbers == NULL){
+        perror("malloc");
+        exit(1);
+    }
+    for(int i = 0; i < NUM_WORKERS; i++){
+        numbers[i] = i; 
+    }
 
     /*
      * STEP 4: Create the worker threads.
@@ -72,6 +86,9 @@ int main(int argc, char* argv[]) {
      *   pthread_create(&thread_ids[i], NULL, simulate_work, (void*)&numbers[i]);
      */
 
+    for (int i = 0; i < NUM_WORKERS; i++){
+        pthread_create(&thread_ids[i], NULL, simulate_work, (void*)&numbers[i]);
+    }
 
     /*
      * STEP 5: Wait for all worker threads to finish.
@@ -81,6 +98,9 @@ int main(int argc, char* argv[]) {
      *   - Inside the loop, call pthread_join() on each thread.
      */
 
+    for (int i = 0; i < NUM_WORKERS; i++){
+        pthread_join(thread_ids[i], NULL);
+    }
 
     /*
      * STEP 6: Print the final counter value.
@@ -91,6 +111,7 @@ int main(int argc, char* argv[]) {
      *       NUM_WORKERS * INCREMENTS_PER_THREAD
      */
 
+    printf("Final counter value: %d \n", counter);
 
     /*
      * STEP 7: Clean up resources.
@@ -100,6 +121,9 @@ int main(int argc, char* argv[]) {
      *   - Free the thread_ids array.
      */
 
+    pthread_mutex_destroy(&counter_lock);
+    free(thread_ids);
+    free(numbers);
 
     return 0;
 }
@@ -113,7 +137,7 @@ void* simulate_work(void* arg) {
      *   - Cast arg to int*.
      *   - Use this value as the thread's ID for printing messages.
      */
-
+    int id = *(int*)arg;
 
     /*
      * STEP 9: Print that this thread has started.
@@ -122,7 +146,7 @@ void* simulate_work(void* arg) {
      *   - Print a message like:
      *       Thread <id> started.
      */
-
+    printf("Thread %d started.\n", id);
 
     /*
      * STEP 10: Simulate some work.
@@ -130,7 +154,7 @@ void* simulate_work(void* arg) {
      * TODO:
      *   - Call sleep(1) or usleep() to make thread scheduling easier to observe.
      */
-
+    sleep(1);
 
     /*
      * STEP 11: Safely update the shared counter.
@@ -143,7 +167,14 @@ void* simulate_work(void* arg) {
      * Why:
      *   counter is shared by all threads. Without a mutex, a race condition can occur.
      */
+    pthread_mutex_lock(&counter_lock);
 
+    printf("Thread %d is updating the shared counter\n", id);
+    for (int i = 0; i < INCREMENTS_PER_THREAD; i++) {
+        counter++;
+    }
+
+    pthread_mutex_unlock(&counter_lock);
 
     /*
      * STEP 12: Print that this thread has finished.
@@ -152,7 +183,7 @@ void* simulate_work(void* arg) {
      *   - Print a message like:
      *       Thread <id> finished.
      */
-
+    printf("Thread %d finished.\n", id);
 
     /*
      * STEP 13: Exit the thread.
