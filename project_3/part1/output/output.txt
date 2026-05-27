@@ -1,0 +1,29 @@
+- Number of passenger threads: 1
+- Number of cars: 1
+- Capacity per car: 1
+- Car waiting period: 1
+- Car ride duration: 1
+- Park duration: 25 seconds
+- Max ride queue size: 1
+
+[Time: 0] Car 0 invoked load()
+[Time: 0] Passenger 0 entered the park
+[Time: 0] Passenger 0 is exploring the park
+[Time: 4] Passenger 0 finished exploring, entering the ticket booth
+[Time: 4] Passenger 0 entering the ticket queue
+[Time: 6] Passenger 0 acquired a ticket
+[Time: 6] Passenger 0 has entered the ride queue
+[Time: 6] Passenger 0 is boarding
+[Time: 6] Car 0 is full with 1 passengers
+[Time: 6] Car 0 has departed to ride
+[Time: 7] Car 0 has returned from the ride
+[Time: 7] Car 0 has invoked unload()
+[Time: 7] Passenger 0 unboarded
+[Time: 7] Passenger 0 is exploring the park
+[Time: 14] Passenger 0 finished exploring, entering the ticket booth
+[Time: 14] Passenger 0 entering the ticket queue
+[Time: 16] Passenger 0 acquired a ticket
+[Time: 16] Passenger 0 has entered the ride queue
+
+========== PARK CLOSED ==========
+
