@@ -18,7 +18,7 @@
 #include <stdarg.h>
  
 /* ─── Global Definitions ─────────────────────────────────────────────── */
-SimParams g;
+SimParams sim;
  
 time_t park_start;
 volatile int park_open = 1;
@@ -71,38 +71,38 @@ static void print_usage(const char *prog) {
  
 /* ─── Print simulation config ────────────────────────────────────────── */
 static void print_config(void) {
-    printf("- Number of passenger threads: %d\n", g.N);
-    printf("- Number of cars: %d\n",              g.C);
-    printf("- Capacity per car: %d\n",            g.P);
-    printf("- Car waiting period: %d\n",          g.W);
-    printf("- Car ride duration: %d\n",           g.R);
-    printf("- Park duration: %d seconds\n",       g.T);
-    printf("- Max ride queue size: %d\n\n",       g.J);
+    printf("- Number of passenger threads: %d\n", sim.N);
+    printf("- Number of cars: %d\n",              sim.C);
+    printf("- Capacity per car: %d\n",            sim.P);
+    printf("- Car waiting period: %d\n",          sim.W);
+    printf("- Car ride duration: %d\n",           sim.R);
+    printf("- Park duration: %d seconds\n",       sim.T);
+    printf("- Max ride queue size: %d\n\n",       sim.J);
 }
  
 /* ─── Main ───────────────────────────────────────────────────────────── */
 int main(int argc, char *argv[]) {
  
     /* Set defaults */
-    g.N = DEFAULT_N;
-    g.C = DEFAULT_C;
-    g.P = DEFAULT_P;
-    g.W = DEFAULT_W;
-    g.R = DEFAULT_R;
-    g.T = DEFAULT_T;
-    g.J = DEFAULT_J;
+    sim.N = DEFAULT_N;
+    sim.C = DEFAULT_C;
+    sim.P = DEFAULT_P;
+    sim.W = DEFAULT_W;
+    sim.R = DEFAULT_R;
+    sim.T = DEFAULT_T;
+    sim.J = DEFAULT_J;
  
     /* Parse command-line flags with getopt */
     int opt;
     while ((opt = getopt(argc, argv, "n:c:p:w:r:t:j:h")) != -1) {
         switch (opt) {
-            case 'n': g.N = atoi(optarg); break;
-            case 'c': g.C = atoi(optarg); break;
-            case 'p': g.P = atoi(optarg); break;
-            case 'w': g.W = atoi(optarg); break;
-            case 'r': g.R = atoi(optarg); break;
-            case 't': g.T = atoi(optarg); break;
-            case 'j': g.J = atoi(optarg); break;
+            case 'n': sim.N = atoi(optarg); break;
+            case 'c': sim.C = atoi(optarg); break;
+            case 'p': sim.P = atoi(optarg); break;
+            case 'w': sim.W = atoi(optarg); break;
+            case 'r': sim.R = atoi(optarg); break;
+            case 't': sim.T = atoi(optarg); break;
+            case 'j': sim.J = atoi(optarg); break;
             case 'h':
                 print_usage(argv[0]);
                 return 0;
@@ -113,14 +113,13 @@ int main(int argc, char *argv[]) {
     }
  
     /* Basic validation */
-    if (g.N <= 0 || g.C <= 0 || g.P <= 0 ||
-        g.W <= 0 || g.R <= 0 || g.T <= 0 || g.J <= 0) {
+    if (sim.N <= 0 || sim.C <= 0 || sim.P <= 0 || sim.W <= 0 || sim.R <= 0 || sim.T <= 0 || sim.J <= 0) {
         fprintf(stderr, "Error: all parameters must be positive integers.\n");
         print_usage(argv[0]);
         return 1;
     }
-    if (g.P >= g.N && g.N > 1) {
-        fprintf(stderr, "Warning: P should be < N per spec (P=%d, N=%d).\n", g.P, g.N);
+    if (sim.P >= sim.N && sim.N > 1) {
+        fprintf(stderr, "Warning: P should be < N per spec (P=%d, N=%d).\n", sim.P, sim.N);
     }
  
     /* Initialize loading bay semaphore — only 1 car loads at a time */
@@ -133,10 +132,10 @@ int main(int argc, char *argv[]) {
     print_config();
  
     /* ── Allocate thread handles & arguments ── */
-    pthread_t *passenger_threads = malloc(g.N * sizeof(pthread_t));
-    pthread_t *car_threads       = malloc(g.C * sizeof(pthread_t));
-    PassengerArg *p_args         = malloc(g.N * sizeof(PassengerArg));
-    CarArg       *c_args         = malloc(g.C * sizeof(CarArg));
+    pthread_t *passenger_threads = malloc(sim.N * sizeof(pthread_t));
+    pthread_t *car_threads       = malloc(sim.C * sizeof(pthread_t));
+    PassengerArg *p_args         = malloc(sim.N * sizeof(PassengerArg));
+    CarArg       *c_args         = malloc(sim.C * sizeof(CarArg));
  
     if (!passenger_threads || !car_threads || !p_args || !c_args) {
         fprintf(stderr, "Error: failed to allocate thread memory.\n");
@@ -144,7 +143,7 @@ int main(int argc, char *argv[]) {
     }
  
     /* ── Launch car threads first so cars are ready to load ── */
-    for (int i = 0; i < g.C; i++) {
+    for (int i = 0; i < sim.C; i++) {
         c_args[i].id = i;
         if (pthread_create(&car_threads[i], NULL, car_thread, &c_args[i]) != 0) {
             fprintf(stderr, "Error: failed to create car thread %d.\n", i);
@@ -153,7 +152,7 @@ int main(int argc, char *argv[]) {
     }
  
     /* ── Launch passenger threads ── */
-    for (int i = 0; i < g.N; i++) {
+    for (int i = 0; i < sim.N; i++) {
         p_args[i].id = i;
         if (pthread_create(&passenger_threads[i], NULL, passenger_thread, &p_args[i]) != 0) {
             fprintf(stderr, "Error: failed to create passenger thread %d.\n", i);
@@ -162,7 +161,7 @@ int main(int argc, char *argv[]) {
     }
  
     /* ── Let the park run for T seconds, then close ── */
-    sleep(g.T);
+    sleep(sim.T);
     park_open = 0;
     printf("\n========== PARK CLOSED ==========\n\n");
  
@@ -174,10 +173,10 @@ int main(int argc, char *argv[]) {
     pthread_mutex_unlock(&ticket_mutex);   /* in case a passenger holds it     */
  
     /* ── Join all threads ── */
-    for (int i = 0; i < g.N; i++) {
+    for (int i = 0; i < sim.N; i++) {
         pthread_join(passenger_threads[i], NULL);
     }
-    for (int i = 0; i < g.C; i++) {
+    for (int i = 0; i < sim.C; i++) {
         pthread_join(car_threads[i], NULL);
     }
  
