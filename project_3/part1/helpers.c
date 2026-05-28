@@ -3,13 +3,15 @@
  
 /* ─── Utility ────────────────────────────────────────────────────────── */
  
-/* Returns elapsed seconds since the park opened. */
-int get_elapsed(void) {
+int get_elapsed(void) 
+// Returns elapsed seconds since the park opened. 
+{
     return (int)(time(NULL) - park_start);
 }
  
-/* Thread-safe timestamped printf.                                        */
-void log_event(const char *fmt, ...) {
+void log_event(const char *fmt, ...) 
+// hread-safe timestamped log
+{
     pthread_mutex_lock(&print_mutex);
     va_list args;
     printf("[Time: %d] ", get_elapsed());
@@ -23,24 +25,30 @@ void log_event(const char *fmt, ...) {
  
 /* ─── Passenger Functions ────────────────────────────────────────────── */
  
-void explore_park(int id) {
+void explore_park(int id) 
+// allow for pasengers to explore the park for 1-10 seconds 
+{
     log_event("Passenger %d is exploring the park", id);
-    int explore_time = (rand() % 10) + 1;  /* 1-10 seconds */
+    int explore_time = (rand() % 10) + 1; 
     sleep(explore_time);
     log_event("Passenger %d finished exploring, entering the ticket booth", id);
 }
  
-void get_ride_ticket(int id) {
-    /* Only one passenger can use the ticket booth at a time */
+void get_ride_ticket(int id) 
+// collect ticket 
+{
+    // Only one passenger can use the ticket booth at a time 
     pthread_mutex_lock(&ticket_mutex);
  
-    /* Re-check after acquiring mutex — park may have closed while waiting */
+    // check after acquiring mutex — park may have closed while waiting 
     if (!park_open) {
         pthread_mutex_unlock(&ticket_mutex);
         pthread_exit(NULL);
     }
  
     pthread_mutex_lock(&state_mutex);
+
+    // increment the ticket queue
     ticket_queue_len++;
     log_event("Passenger %d entering the ticket queue", id);
  
