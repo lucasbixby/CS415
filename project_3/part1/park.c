@@ -1,16 +1,17 @@
 /*
-* Description: Project 3 [ part 1 ] for Duck Park v1.0
+* Description: Project 3 [ part1 / park.c ] for Duck Park v1.0
 *
 * Author: Lucas Bixby
 *
-* Date: 05/26/2026 ( last modified )
+* Date: 05/28/2026 ( last modified )
 */
 
 /*
     Part 1: Single-Threaded Solution:
-    Develop and test each component with a single passenger thread and a single car thread to verify 
-    basic functionality. Terminal output should reflect the state of the system includes actions made 
-    or status changes for each thread.
+    Develop and test each component with a single passenger thread and a 
+    single car thread to verify basic functionality. Terminal output should 
+    reflect the state of the system includes actions made or status changes 
+    for each thread.
 */
 
 
@@ -23,35 +24,37 @@ SimParams sim;
 time_t park_start;
 volatile int park_open = 1;
  
-int ticket_queue_len   = 0;
-int ride_queue_len     = 0;
-int car_passengers     = 0;
+int ticket_queue_len = 0;
+int ride_queue_len = 0;
+int car_passengers = 0;
 time_t last_board_time = 0;
  
-pthread_mutex_t ticket_mutex   = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t state_mutex    = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t print_mutex    = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t  load_cond      = PTHREAD_COND_INITIALIZER;
-pthread_cond_t  unload_cond    = PTHREAD_COND_INITIALIZER;
-pthread_cond_t  car_ready_cond = PTHREAD_COND_INITIALIZER;
-pthread_cond_t  ride_q_cond    = PTHREAD_COND_INITIALIZER;
-sem_t           loading_bay;   /* initialized in main to 1                    */
+pthread_mutex_t ticket_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t load_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t unload_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t car_ready_cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t ride_q_cond = PTHREAD_COND_INITIALIZER;
+sem_t loading_bay;   
  
-int loading_open         = 0;
-int unloading_open       = 0;
+int loading_open = 0;
+int unloading_open = 0;
 int passengers_unboarded = 0;
  
 /* ─── Defaults ───────────────────────────────────────────────────────── */
-#define DEFAULT_N 1
-#define DEFAULT_C 1
+#define DEFAULT_N 1 // single passenger thread for part 1 testing
+#define DEFAULT_C 1 // single car thread fot part 1 testing
 #define DEFAULT_P 2
 #define DEFAULT_W 3
 #define DEFAULT_R 2
-#define DEFAULT_T 30
+#define DEFAULT_T 20
 #define DEFAULT_J 5
  
 /* ─── Usage ──────────────────────────────────────────────────────────── */
-static void print_usage(const char *prog) {
+static void print_usage(const char *prog) 
+// details the usage of the program 
+{
     fprintf(stderr,
         "Usage: %s [OPTIONS]\n"
         "Options:\n"
@@ -70,7 +73,9 @@ static void print_usage(const char *prog) {
 }
  
 /* ─── Print simulation config ────────────────────────────────────────── */
-static void print_config(void) {
+static void print_config(void) 
+// prints the simulation configuration before executing
+{
     printf("- Number of passenger threads: %d\n", sim.N);
     printf("- Number of cars: %d\n",              sim.C);
     printf("- Capacity per car: %d\n",            sim.P);
@@ -81,9 +86,10 @@ static void print_config(void) {
 }
  
 /* ─── Main ───────────────────────────────────────────────────────────── */
-int main(int argc, char *argv[]) {
- 
-    /* Set defaults */
+int main(int argc, char *argv[]) 
+// main execution of the simulation. Opens the park, launches threads, closes the park
+{
+    // Set defaults values for non-specified parameters upon execution 
     sim.N = DEFAULT_N;
     sim.C = DEFAULT_C;
     sim.P = DEFAULT_P;
@@ -92,7 +98,7 @@ int main(int argc, char *argv[]) {
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    /* Parse command-line flags with getopt */
+    // Parse command-line flags with getopt 
     int opt;
     while ((opt = getopt(argc, argv, "n:c:p:w:r:t:j:h")) != -1) {
         switch (opt) {
@@ -112,7 +118,7 @@ int main(int argc, char *argv[]) {
         }
     }
  
-    /* Basic validation */
+    // Basic validation for non-zero entries 
     if (sim.N <= 0 || sim.C <= 0 || sim.P <= 0 || sim.W <= 0 || sim.R <= 0 || sim.T <= 0 || sim.J <= 0) {
         fprintf(stderr, "Error: all parameters must be positive integers.\n");
         print_usage(argv[0]);
@@ -122,27 +128,27 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Warning: P should be < N per spec (P=%d, N=%d).\n", sim.P, sim.N);
     }
  
-    /* Initialize loading bay semaphore — only 1 car loads at a time */
+    // Initialize loading bay semaphore — for part 1, only 1 car can load at a time 
     sem_init(&loading_bay, 0, 1);
  
-    /* Record simulation start time */
+    // Record simulation start time 
     park_start = time(NULL);
  
-    /* Print config header */
+    // Print the config header
     print_config();
  
-    /* ── Allocate thread handles & arguments ── */
+    // Allocate thread handles & arguments 
     pthread_t *passenger_threads = malloc(sim.N * sizeof(pthread_t));
     pthread_t *car_threads       = malloc(sim.C * sizeof(pthread_t));
     PassengerArg *p_args         = malloc(sim.N * sizeof(PassengerArg));
-    CarArg       *c_args         = malloc(sim.C * sizeof(CarArg));
+    CarArg *c_args               = malloc(sim.C * sizeof(CarArg));
  
     if (!passenger_threads || !car_threads || !p_args || !c_args) {
         fprintf(stderr, "Error: failed to allocate thread memory.\n");
         return 1;
     }
  
-    /* ── Launch car threads first so cars are ready to load ── */
+    // Launch car threads first so cars are ready to load 
     for (int i = 0; i < sim.C; i++) {
         c_args[i].id = i;
         if (pthread_create(&car_threads[i], NULL, car_thread, &c_args[i]) != 0) {
@@ -151,7 +157,7 @@ int main(int argc, char *argv[]) {
         }
     }
  
-    /* ── Launch passenger threads ── */
+    // Launch passenger threads 
     for (int i = 0; i < sim.N; i++) {
         p_args[i].id = i;
         if (pthread_create(&passenger_threads[i], NULL, passenger_thread, &p_args[i]) != 0) {
@@ -160,19 +166,19 @@ int main(int argc, char *argv[]) {
         }
     }
  
-    /* ── Let the park run for T seconds, then close ── */
+    // Let the park run for T seconds, then close 
     sleep(sim.T);
     park_open = 0;
     printf("\n========== PARK CLOSED ==========\n\n");
  
-    /* Wake any threads blocked on condition variables so they can exit */
+    // Wake any threads blocked on condition variables so they can exit 
     pthread_cond_broadcast(&load_cond);
     pthread_cond_broadcast(&unload_cond);
     pthread_cond_broadcast(&car_ready_cond);
     pthread_cond_broadcast(&ride_q_cond);
-    pthread_mutex_unlock(&ticket_mutex);   /* in case a passenger holds it     */
+    pthread_mutex_unlock(&ticket_mutex);   // in case a passenger holds it 
  
-    /* ── Join all threads ── */
+    /* ────────── Join all threads ────────── */
     for (int i = 0; i < sim.N; i++) {
         pthread_join(passenger_threads[i], NULL);
     }
@@ -180,7 +186,7 @@ int main(int argc, char *argv[]) {
         pthread_join(car_threads[i], NULL);
     }
  
-    /* ── Cleanup ── */
+    // Cleanup 
     pthread_mutex_destroy(&ticket_mutex);
     pthread_mutex_destroy(&state_mutex);
     pthread_mutex_destroy(&print_mutex);
