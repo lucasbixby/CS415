@@ -1,5 +1,5 @@
 /*
-* Description: Project 3 [ part1 / park.c ] for Duck Park v1.0
+* Description: Project 3 [ part2 / park.c ] for Duck Park v2.0
 *
 * Author: Lucas Bixby
 *
@@ -7,11 +7,12 @@
 */
 
 /*
-    Part 1: Single-Threaded Solution:
-    Develop and test each component with a single passenger thread and a 
-    single car thread to verify basic functionality. Terminal output should 
-    reflect the state of the system includes actions made or status changes 
-    for each thread.
+    Part 2: Multi-Threaded Solution:
+    Test your implementation with multiple passenger threads entering and exiting from multiple car
+    threads at varying times to ensure correct synchronization. You should choose to use any
+    combination of mutex lock, semaphore, and conditional variable in the Pthread library to
+    implement. Terminal output should reflect the state of the system include actions make or status
+    changes for each thread.
 */
 
 
@@ -43,13 +44,13 @@ int unloading_open = 0;
 int passengers_unboarded = 0;
  
 /* ─── Defaults ───────────────────────────────────────────────────────── */
-#define DEFAULT_N 1 // single passenger thread for part 1 testing
-#define DEFAULT_C 1 // single car thread fot part 1 testing
+#define DEFAULT_N 5 
+#define DEFAULT_C 2 
 #define DEFAULT_P 2
 #define DEFAULT_W 3
-#define DEFAULT_R 2
-#define DEFAULT_T 20
-#define DEFAULT_J 5
+#define DEFAULT_R 5
+#define DEFAULT_T 30
+#define DEFAULT_J 3
  
 /* ─── Usage ──────────────────────────────────────────────────────────── */
 static void print_usage(const char *prog) 

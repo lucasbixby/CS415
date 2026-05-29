@@ -1,5 +1,5 @@
 /*
-* Description: Project 3 [ part1 / park.h ] for Duck Park v1.0
+* Description: Project 3 [ part2 / park.h ] for Duck Park v2.0
 *
 * Author: Lucas Bixby
 *
@@ -7,9 +7,9 @@
 */
 
 /*
-    Part 1: part1 header file:
-    Header file for part 1 linking the helper functions to the main park.c 
-    program for part1. 
+    Part 2: part2 header file:
+    Header file for part 2 linking the helper functions to the main park.c 
+    program for part2. 
 */
 
 #ifndef PARK_H

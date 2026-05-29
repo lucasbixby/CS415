@@ -1,5 +1,5 @@
 /*
-* Description: Project 3 [ part1 / helpers.c ] for Duck Park v1.0
+* Description: Project 3 [ part2 / helpers.c ] for Duck Park v2.0
 *
 * Author: Lucas Bixby
 *
@@ -7,7 +7,7 @@
 */
 
 /*
-    Part 1: helper functions:
+    Part 2: helper functions:
     contains the funcitonality and behaviors for passenger and car threads, 
     along with utility helper functions.
 */
