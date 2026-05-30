@@ -14,7 +14,6 @@
     for each thread.
 */
 
-
 #include "park.h"
 #include <stdarg.h>
  
@@ -43,34 +42,13 @@ int unloading_open = 0;
 int passengers_unboarded = 0;
  
 /* ─── Defaults ───────────────────────────────────────────────────────── */
-#define DEFAULT_N 1 // single passenger thread for part 1 testing
-#define DEFAULT_C 1 // single car thread fot part 1 testing
-#define DEFAULT_P 2
-#define DEFAULT_W 3
-#define DEFAULT_R 2
-#define DEFAULT_T 20
+#define DEFAULT_N 1 // single passenger thread for part 1 
+#define DEFAULT_C 1 // single car thread fot part 1 
+#define DEFAULT_P 1
+#define DEFAULT_W 1
+#define DEFAULT_R 3
+#define DEFAULT_T 30
 #define DEFAULT_J 5
- 
-/* ─── Usage ──────────────────────────────────────────────────────────── */
-static void print_usage(const char *prog) 
-// details the usage of the program 
-{
-    fprintf(stderr,
-        "Usage: %s [OPTIONS]\n"
-        "Options:\n"
-        "  -n <int>   number of passenger threads     (default: %d)\n"
-        "  -c <int>   number of car threads           (default: %d)\n"
-        "  -p <int>   capacity per car                (default: %d)\n"
-        "  -w <int>   car waiting period (seconds)    (default: %d)\n"
-        "  -r <int>   car ride duration (seconds)     (default: %d)\n"
-        "  -t <int>   park open duration (seconds)    (default: %d)\n"
-        "  -j <int>   ride queue max size             (default: %d)\n"
-        "  -h         display this help message\n",
-        prog,
-        DEFAULT_N, DEFAULT_C, DEFAULT_P,
-        DEFAULT_W, DEFAULT_R, DEFAULT_T, DEFAULT_J
-    );
-}
  
 /* ─── Print simulation config ────────────────────────────────────────── */
 static void print_config(void) 
@@ -86,7 +64,7 @@ static void print_config(void)
 }
  
 /* ─── Main ───────────────────────────────────────────────────────────── */
-int main(int argc, char *argv[]) 
+int main() //int argc, char *argv[]
 // main execution of the simulation. Opens the park, launches threads, closes the park
 {
     // Set defaults values for non-specified parameters upon execution 
@@ -98,36 +76,6 @@ int main(int argc, char *argv[])
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    // Parse command-line flags with getopt 
-    int opt;
-    while ((opt = getopt(argc, argv, "n:c:p:w:r:t:j:h")) != -1) {
-        switch (opt) {
-            case 'n': sim.N = atoi(optarg); break;
-            case 'c': sim.C = atoi(optarg); break;
-            case 'p': sim.P = atoi(optarg); break;
-            case 'w': sim.W = atoi(optarg); break;
-            case 'r': sim.R = atoi(optarg); break;
-            case 't': sim.T = atoi(optarg); break;
-            case 'j': sim.J = atoi(optarg); break;
-            case 'h':
-                print_usage(argv[0]);
-                return 0;
-            default:
-                print_usage(argv[0]);
-                return 1;
-        }
-    }
- 
-    // Basic validation for non-zero entries 
-    if (sim.N <= 0 || sim.C <= 0 || sim.P <= 0 || sim.W <= 0 || sim.R <= 0 || sim.T <= 0 || sim.J <= 0) {
-        fprintf(stderr, "Error: all parameters must be positive integers.\n");
-        print_usage(argv[0]);
-        return 1;
-    }
-    if (sim.P >= sim.N && sim.N > 1) {
-        fprintf(stderr, "Warning: P should be < N per spec (P=%d, N=%d).\n", sim.P, sim.N);
-    }
- 
     // Initialize loading bay semaphore — for part 1, only 1 car can load at a time 
     sem_init(&loading_bay, 0, 1);
  
@@ -137,33 +85,22 @@ int main(int argc, char *argv[])
     // Print the config header
     print_config();
  
-    // Allocate thread handles & arguments 
-    pthread_t *passenger_threads = malloc(sim.N * sizeof(pthread_t));
-    pthread_t *car_threads       = malloc(sim.C * sizeof(pthread_t));
-    PassengerArg *p_args         = malloc(sim.N * sizeof(PassengerArg));
-    CarArg *c_args               = malloc(sim.C * sizeof(CarArg));
+    // Define threads 
+    pthread_t passenger, car;
+
+    PassengerArg p_arg = { .id = 0 };
+    CarArg       c_arg = { .id = 0 };
  
-    if (!passenger_threads || !car_threads || !p_args || !c_args) {
-        fprintf(stderr, "Error: failed to allocate thread memory.\n");
+    // Launch single car thread first 
+    if (pthread_create(&car, NULL, car_thread, &p_arg) != 0) {
+        fprintf(stderr, "Error: failed to create car thread %d.\n", 0);
         return 1;
     }
  
-    // Launch car threads first so cars are ready to load 
-    for (int i = 0; i < sim.C; i++) {
-        c_args[i].id = i;
-        if (pthread_create(&car_threads[i], NULL, car_thread, &c_args[i]) != 0) {
-            fprintf(stderr, "Error: failed to create car thread %d.\n", i);
-            return 1;
-        }
-    }
- 
-    // Launch passenger threads 
-    for (int i = 0; i < sim.N; i++) {
-        p_args[i].id = i;
-        if (pthread_create(&passenger_threads[i], NULL, passenger_thread, &p_args[i]) != 0) {
-            fprintf(stderr, "Error: failed to create passenger thread %d.\n", i);
-            return 1;
-        }
+    // Launch single passenger threads 
+    if (pthread_create(&passenger, NULL, passenger_thread, &c_arg) != 0) {
+        fprintf(stderr, "Error: failed to create passenger thread %d.\n", 0);
+        return 1;
     }
  
     // Let the park run for T seconds, then close 
@@ -176,15 +113,10 @@ int main(int argc, char *argv[])
     pthread_cond_broadcast(&unload_cond);
     pthread_cond_broadcast(&car_ready_cond);
     pthread_cond_broadcast(&ride_q_cond);
-    pthread_mutex_unlock(&ticket_mutex);   // in case a passenger holds it 
  
     /* ────────── Join all threads ────────── */
-    for (int i = 0; i < sim.N; i++) {
-        pthread_join(passenger_threads[i], NULL);
-    }
-    for (int i = 0; i < sim.C; i++) {
-        pthread_join(car_threads[i], NULL);
-    }
+    pthread_join(passenger, NULL);
+    pthread_join(car, NULL);
  
     // Cleanup 
     pthread_mutex_destroy(&ticket_mutex);
@@ -195,11 +127,6 @@ int main(int argc, char *argv[])
     pthread_cond_destroy(&car_ready_cond);
     pthread_cond_destroy(&ride_q_cond);
     sem_destroy(&loading_bay);
- 
-    free(passenger_threads);
-    free(car_threads);
-    free(p_args);
-    free(c_args);
  
     return 0;
 }
