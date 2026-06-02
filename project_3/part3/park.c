@@ -28,11 +28,16 @@ volatile int park_open = 1;
 int ticket_queue_len = 0;
 int ride_queue_len = 0;
 int car_passengers = 0;
+int exploring = 0; 
+int waiting_in_car = 0;
+int riding = 0; 
 time_t last_board_time = 0;
  
 pthread_mutex_t ticket_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t ticket_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t ride_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t load_cond = PTHREAD_COND_INITIALIZER;
 pthread_cond_t unload_cond = PTHREAD_COND_INITIALIZER;
 pthread_cond_t car_ready_cond = PTHREAD_COND_INITIALIZER;
@@ -42,6 +47,12 @@ sem_t loading_bay;
 int loading_open = 0;
 int unloading_open = 0;
 int passengers_unboarded = 0;
+
+CarState *car_states;
+int *car_load_counts;
+
+int *ticket_queue;
+int *ride_queue;
  
 /* ─── Defaults ───────────────────────────────────────────────────────── */
 #define DEFAULT_N 5 
@@ -143,6 +154,12 @@ int main(int argc, char *argv[])
     pthread_t *car_threads       = malloc(sim.C * sizeof(pthread_t));
     PassengerArg *p_args         = malloc(sim.N * sizeof(PassengerArg));
     CarArg *c_args               = malloc(sim.C * sizeof(CarArg));
+
+    car_states                   = calloc(sim.C, sizeof(CarState));
+    car_load_counts              = calloc(sim.C, sizeof(int));
+
+    ticket_queue            = malloc(sim.N * sizeof(int));
+    ride_queue              = malloc(sim.N * sizeof(int));
  
     if (!passenger_threads || !car_threads || !p_args || !c_args) {
         fprintf(stderr, "Error: failed to allocate thread memory.\n");
@@ -166,6 +183,10 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
+
+    pthread_t monitor;
+
+    pthread_create(&monitor, NULL, monitor_thread, NULL);
  
     // Let the park run for T seconds, then close 
     sleep(sim.T);
@@ -186,11 +207,14 @@ int main(int argc, char *argv[])
     for (int i = 0; i < sim.C; i++) {
         pthread_join(car_threads[i], NULL);
     }
+    pthread_join(monitor, NULL);
  
     // Cleanup 
     pthread_mutex_destroy(&ticket_mutex);
     pthread_mutex_destroy(&state_mutex);
     pthread_mutex_destroy(&print_mutex);
+    pthread_mutex_destroy(&ticket_queue_mutex);
+    pthread_mutex_destroy(&ride_queue_mutex);
     pthread_cond_destroy(&load_cond);
     pthread_cond_destroy(&unload_cond);
     pthread_cond_destroy(&car_ready_cond);
@@ -201,6 +225,10 @@ int main(int argc, char *argv[])
     free(car_threads);
     free(p_args);
     free(c_args);
+    free(car_states);
+    free(car_load_counts); 
+    free(ticket_queue);
+    free(ride_queue);
  
     return 0;
 }
