@@ -8,8 +8,8 @@
 
 /*
     Part 2: helper functions:
-    contains the funcitonality and behaviors for passenger and car threads, 
-    along with utility helper functions.
+    Updated helper file from part 1 contains the funcitonality and behaviors for 
+    passenger and car threads, along with utility helper functions.
 */
 
 #include "park.h"

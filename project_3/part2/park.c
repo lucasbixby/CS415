@@ -3,7 +3,7 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/28/2026 ( last modified )
+* Date: 06/01/2026 ( last modified )
 */
 
 /*
@@ -54,7 +54,7 @@ int passengers_unboarded = 0;
  
 /* ─── Usage ──────────────────────────────────────────────────────────── */
 static void print_usage(const char *prog) 
-// details the usage of the program 
+// details the usage of the program using the -h flag 
 {
     fprintf(stderr,
         "Usage: %s [OPTIONS]\n"
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Warning: P should be < N per spec (P=%d, N=%d).\n", sim.P, sim.N);
     }
  
-    // Initialize loading bay semaphore — for part 1, only 1 car can load at a time 
+    // Initialize loading bay semaphore
     sem_init(&loading_bay, 0, 1);
  
     // Record simulation start time 
