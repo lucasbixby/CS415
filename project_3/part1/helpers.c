@@ -3,7 +3,7 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/28/2026 ( last modified )
+* Date: 06/01/2026 ( last modified )
 */
 
 /*
@@ -40,7 +40,7 @@ void log_event(const char *fmt, ...)
 /* ─── Passenger Functions ────────────────────────────────────────────── */
  
 void explore_park(int id) 
-// allow for pasengers to explore the park for a random amount of time ( 1-10 seconds )
+// allow for pasenger to explore the park for a random amount of time ( 1-10 seconds )
 {
     log_event("Passenger %d is exploring the park", id);
     int explore_time = (rand() % 10) + 1; 
@@ -98,7 +98,7 @@ void get_ride_ticket(int id)
 }
  
 void enter_ride_queue(int id) 
-// allows for passengers to enter the ride queue 
+// allows passenger to enter the ride queue 
 {
     pthread_mutex_lock(&state_mutex);
     ride_queue_len++;
@@ -107,7 +107,7 @@ void enter_ride_queue(int id)
 }
  
 void board_car(int id) 
-// handle passengers boarding the ride
+// handle passenger boarding the ride
 {
     pthread_mutex_lock(&state_mutex);
  
@@ -127,14 +127,14 @@ void board_car(int id)
     last_board_time = time(NULL);
     log_event("Passenger %d is boarding", id);
  
-    // Signal car that a new passenger has boarded 
+    // Signal car that a passenger has boarded 
     pthread_cond_signal(&car_ready_cond);
  
     pthread_mutex_unlock(&state_mutex);
 }
  
 void unboard_car(int id) 
-// handle passengers unboarding the ride 
+// handle passenger unboarding the ride 
 {
     pthread_mutex_lock(&state_mutex);
  
@@ -167,18 +167,18 @@ void car_load(int id)
  
     log_event("Car %d invoked load()", id);
  
-    // Broadcast so waiting passengers know loading is open 
+    // Broadcast so waiting passenger knows loading is open 
     pthread_cond_broadcast(&load_cond);
  
     // Wait until full OR partially full and W seconds have passed 
     while (park_open) {
         if (car_passengers >= sim.P) {
-            // Car is full — depart immediately 
+            // Car is full —> depart immediately 
             break;
         }
  
         if (car_passengers > 0) {
-            // At least one passenger — wait up to W seconds for more 
+            // At least one passenger 
             struct timespec deadline;
             clock_gettime(CLOCK_REALTIME, &deadline);
             deadline.tv_sec += sim.W;
@@ -188,7 +188,7 @@ void car_load(int id)
             if (car_passengers >= sim.P) break;          
             if (rc != 0 && car_passengers > 0) break;  
         } else {
-            // No passengers — wait indefinitely 
+            // No passengers —> wait indefinitely 
             pthread_cond_wait(&car_ready_cond, &state_mutex);
         }
     }
@@ -245,7 +245,7 @@ void car_unload(int id)
 /* ─── Thread Behaviors ────────────────────────────────────────────── */
  
 void *passenger_thread(void *arg) 
-// main behavior of pasanger threads 
+// main behavior of pasanger thread
 {
     PassengerArg *parg = (PassengerArg *)arg;
     int id = parg->id;
@@ -275,7 +275,7 @@ void *passenger_thread(void *arg)
 }
  
 void *car_thread(void *arg) 
-// main behavior for car threads
+// main behavior for car thread
 {
     CarArg *carg = (CarArg *)arg;
     int id = carg->id;

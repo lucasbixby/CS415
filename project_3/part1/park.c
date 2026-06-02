@@ -50,7 +50,7 @@ int passengers_unboarded = 0;
 #define DEFAULT_T 30
 #define DEFAULT_J 5
  
-/* ─── Print simulation config ────────────────────────────────────────── */
+/* ─── Print Simulation config ────────────────────────────────────────── */
 static void print_config(void) 
 // prints the simulation configuration before executing
 {
@@ -64,10 +64,10 @@ static void print_config(void)
 }
  
 /* ─── Main ───────────────────────────────────────────────────────────── */
-int main() //int argc, char *argv[]
+int main() 
 // main execution of the simulation. Opens the park, launches threads, closes the park
 {
-    // Set defaults values for non-specified parameters upon execution 
+    // Set defaults values
     sim.N = DEFAULT_N;
     sim.C = DEFAULT_C;
     sim.P = DEFAULT_P;
@@ -76,7 +76,8 @@ int main() //int argc, char *argv[]
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    // Initialize loading bay semaphore — for part 1, only 1 car can load at a time 
+    // Initialize loading bay semaphore 
+    // for part 1, only 1 car can load at a time 
     sem_init(&loading_bay, 0, 1);
  
     // Record simulation start time 
