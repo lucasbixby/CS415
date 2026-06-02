@@ -48,15 +48,33 @@ extern int ticket_queue_len;
  
 // Ride queue length ( how many passengers are waiting to board ) 
 extern int ride_queue_len;
+
+// Passenger activity counters ( protected by state_mutex )
+extern int exploring;
+extern int waiting_in_car;
+extern int riding;
  
 // Car state 
 extern int car_passengers;             // passengers currently loaded in car      
 extern time_t last_board_time;         // wall-clock time last passenger boarded  
+
+// Car state enum
+typedef enum {
+    CAR_WAITING,
+    CAR_LOADING,
+    CAR_RIDING,
+    CAR_UNLOADING
+} CarState;
+
+extern CarState *car_states;
+extern int *car_load_counts;
  
 // Synchronization primitives 
 extern pthread_mutex_t ticket_mutex;   // serializes ticket booth              
 extern pthread_mutex_t state_mutex;    // protects all shared state      
-extern pthread_mutex_t print_mutex;    // serializes stdout writes             
+extern pthread_mutex_t print_mutex;    // serializes stdout writes      
+extern pthread_mutex_t ticket_queue_mutex;
+extern pthread_mutex_t ride_queue_mutex;      
 extern pthread_cond_t load_cond;       // car signals passengers to board      
 extern pthread_cond_t unload_cond;     // car signals passengers to unboard    
 extern pthread_cond_t car_ready_cond;  // passenger signals car a rider joined 
@@ -67,9 +85,16 @@ extern sem_t loading_bay;              // only 1 car may be in load() at once
 extern int loading_open;               // 1 = car is accepting boarders           
 extern int unloading_open;             // 1 = car has signaled unload             
 extern int passengers_unboarded;       // number of passengers that have unboarded 
+
+extern CarState *car_states;
+extern int *car_load_counts;
  
 // Global simulation parameters
 extern SimParams sim;
+
+// logging arrays
+extern int *ticket_queue;
+extern int *ride_queue;
  
 /* ─── Thread Argument Types ──────────────────────────────────────────── */
 
@@ -104,5 +129,6 @@ void car_unload(int id);
 // Thread Behaviors 
 void *passenger_thread(void *arg);
 void *car_thread(void *arg);
+void *monitor_thread();
  
 #endif 
