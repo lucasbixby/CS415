@@ -7,19 +7,19 @@
 */
 
 /*
-    Part 2: Multi-Threaded Solution:
-    Test your implementation with multiple passenger threads entering and exiting from multiple car
-    threads at varying times to ensure correct synchronization. You should choose to use any
-    combination of mutex lock, semaphore, and conditional variable in the Pthread library to
-    implement. Terminal output should reflect the state of the system include actions make or status
-    changes for each thread.
+    Part 2: Multi-Threaded Solution
+        Test your implementation with multiple passenger threads entering and exiting from multiple car
+        threads at varying times to ensure correct synchronization. You should choose to use any
+        combination of mutex lock, semaphore, and conditional variable in the Pthread library to
+        implement. Terminal output should reflect the state of the system include actions make or status
+        changes for each thread.
 */
 
 
 #include "park.h"
 #include <stdarg.h>
  
-/* ─── Global Definitions ─────────────────────────────────────────────── */
+/* --- Global Definitions -------------------------------------------------- */
 SimParams sim;
  
 time_t park_start;
@@ -43,7 +43,7 @@ int loading_open = 0;
 int unloading_open = 0;
 int passengers_unboarded = 0;
  
-/* ─── Defaults ───────────────────────────────────────────────────────── */
+/* --- Defaults ------------------------------------------------------------ */
 #define DEFAULT_N 5 
 #define DEFAULT_C 2 
 #define DEFAULT_P 2
@@ -52,7 +52,7 @@ int passengers_unboarded = 0;
 #define DEFAULT_T 30
 #define DEFAULT_J 3
  
-/* ─── Usage ──────────────────────────────────────────────────────────── */
+/* --- Usage --------------------------------------------------------------- */
 static void print_usage(const char *prog) 
 // details the usage of the program using the -h flag 
 {
@@ -73,7 +73,7 @@ static void print_usage(const char *prog)
     );
 }
  
-/* ─── Print simulation config ────────────────────────────────────────── */
+/* --- Print Simulation config --------------------------------------------- */
 static void print_config(void) 
 // prints the simulation configuration before executing
 {
@@ -86,7 +86,7 @@ static void print_config(void)
     printf("- Max ride queue size: %d\n\n",       sim.J);
 }
  
-/* ─── Main ───────────────────────────────────────────────────────────── */
+/* --- Main ---------------------------------------------------------------- */
 int main(int argc, char *argv[]) 
 // main execution of the simulation. Opens the park, launches threads, closes the park
 {
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    // Parse command-line flags with getopt 
+    // Parse command-line flags
     int opt;
     while ((opt = getopt(argc, argv, "n:c:p:w:r:t:j:h")) != -1) {
         switch (opt) {
@@ -177,9 +177,8 @@ int main(int argc, char *argv[])
     pthread_cond_broadcast(&unload_cond);
     pthread_cond_broadcast(&car_ready_cond);
     pthread_cond_broadcast(&ride_q_cond);
-    pthread_mutex_unlock(&ticket_mutex);   // in case a passenger holds it 
  
-    /* ────────── Join all threads ────────── */
+    /* ------------- Join all threads ------------- */
     for (int i = 0; i < sim.N; i++) {
         pthread_join(passenger_threads[i], NULL);
     }
