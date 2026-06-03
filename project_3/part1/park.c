@@ -7,17 +7,17 @@
 */
 
 /*
-    Part 1: Single-Threaded Solution:
-    Develop and test each component with a single passenger thread and a 
-    single car thread to verify basic functionality. Terminal output should 
-    reflect the state of the system includes actions made or status changes 
-    for each thread.
+    Part 1: Single-Threaded Solution
+        Develop and test each component with a single passenger thread and a 
+        single car thread to verify basic functionality. Terminal output should 
+        reflect the state of the system includes actions made or status changes 
+        for each thread.
 */
 
 #include "park.h"
 #include <stdarg.h>
  
-/* ─── Global Definitions ─────────────────────────────────────────────── */
+/* --- Global Definitions -------------------------------------------------- */
 SimParams sim;
  
 time_t park_start;
@@ -41,7 +41,7 @@ int loading_open = 0;
 int unloading_open = 0;
 int passengers_unboarded = 0;
  
-/* ─── Defaults ───────────────────────────────────────────────────────── */
+/* --- Defaults ------------------------------------------------------------ */
 #define DEFAULT_N 1 // single passenger thread for part 1 
 #define DEFAULT_C 1 // single car thread fot part 1 
 #define DEFAULT_P 1
@@ -50,9 +50,9 @@ int passengers_unboarded = 0;
 #define DEFAULT_T 30
 #define DEFAULT_J 5
  
-/* ─── Print Simulation config ────────────────────────────────────────── */
+/* --- Print Simulation config --------------------------------------------- */
 static void print_config(void) 
-// prints the simulation configuration before executing
+//  prints the simulation configuration before executing
 {
     printf("- Number of passenger threads: %d\n", sim.N);
     printf("- Number of cars: %d\n",              sim.C);
@@ -63,9 +63,9 @@ static void print_config(void)
     printf("- Max ride queue size: %d\n\n",       sim.J);
 }
  
-/* ─── Main ───────────────────────────────────────────────────────────── */
+/* --- Main ---------------------------------------------------------------- */
 int main() 
-// main execution of the simulation. Opens the park, launches threads, closes the park
+//  main execution of the simulation. Opens the park, launches threads, closes the park
 {
     // Set defaults values
     sim.N = DEFAULT_N;
@@ -76,8 +76,7 @@ int main()
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    // Initialize loading bay semaphore 
-    // for part 1, only 1 car can load at a time 
+    // Initialize loading bay semaphore. For part 1, only 1 car can load at a time 
     sem_init(&loading_bay, 0, 1);
  
     // Record simulation start time 
@@ -86,20 +85,20 @@ int main()
     // Print the config header
     print_config();
  
-    // Define threads 
+    // Define single car and passenger threads 
     pthread_t passenger, car;
 
     PassengerArg p_arg = { .id = 0 };
     CarArg       c_arg = { .id = 0 };
  
-    // Launch single car thread first 
-    if (pthread_create(&car, NULL, car_thread, &p_arg) != 0) {
+    // Launch car thread 
+    if (pthread_create(&car, NULL, car_thread, &c_arg) != 0) {
         fprintf(stderr, "Error: failed to create car thread %d.\n", 0);
         return 1;
     }
  
-    // Launch single passenger threads 
-    if (pthread_create(&passenger, NULL, passenger_thread, &c_arg) != 0) {
+    // Launch passenger thread 
+    if (pthread_create(&passenger, NULL, passenger_thread, &p_arg) != 0) {
         fprintf(stderr, "Error: failed to create passenger thread %d.\n", 0);
         return 1;
     }
@@ -115,7 +114,7 @@ int main()
     pthread_cond_broadcast(&car_ready_cond);
     pthread_cond_broadcast(&ride_q_cond);
  
-    /* ────────── Join all threads ────────── */
+    /* ------------- Join threads ------------- */
     pthread_join(passenger, NULL);
     pthread_join(car, NULL);
  
