@@ -3,28 +3,28 @@
 *
 * Author: Lucas Bixby
 *
-* Date: 05/28/2026 ( last modified )
+* Date: 06/02/2026 ( last modified )
 */
 
 /*
     Part 2: helper functions:
-    Updated helper file from part 1 contains the funcitonality and behaviors for 
-    passenger and car threads, along with utility helper functions.
+        Updated helper file from part 1 contains the funcitonality and behaviors for 
+        passenger and car threads, along with utility helper functions.
 */
 
 #include "park.h"
 #include <stdarg.h>
  
-/* ─── Utility Functions ──────────────────────────────────────────────── */
+/* --- Utility Functions ------------------------------------------------ */
  
 int get_elapsed(void) 
-// Returns elapsed seconds after the park has opened. 
+//  Returns elapsed time in seconds after the park has opened. 
 {
     return (int)(time(NULL) - park_start);
 }
  
 void log_event(const char *fmt, ...) 
-// Thread-safe timestamped log
+//  Thread-safe timestamped log for arbitrary event (passenger/ car)
 {
     pthread_mutex_lock(&print_mutex);
     va_list args;
@@ -37,24 +37,25 @@ void log_event(const char *fmt, ...)
     pthread_mutex_unlock(&print_mutex);
 }
  
-/* ─── Passenger Functions ────────────────────────────────────────────── */
+/* --- Passenger Functions ---------------------------------------------- */
  
 void explore_park(int id) 
-// allow for pasengers to explore the park for a random amount of time ( 1-10 seconds )
+//  allow for pasenger to explore the park for a random time interval ( 1-10 seconds )
 {
     log_event("Passenger %d is exploring the park", id);
     int explore_time = (rand() % 10) + 1; 
     sleep(explore_time);
+    if (!park_open) pthread_exit(NULL);
     log_event("Passenger %d finished exploring, entering the ticket booth", id);
 }
  
 void get_ride_ticket(int id) 
-// allows for passengers to collect tickets at the ticket booth when its their turn 
+//  allows for passengers to collect tickets at the ticket booth when its their turn.
+//  Only one passenger can use the ticket booth at a time, simulates ticket processing 
+//  time and accounts for park closing while passengers waiting in line.  
 {
-    // Only one passenger can use the ticket booth at a time 
     pthread_mutex_lock(&ticket_mutex);
- 
-    // check after acquiring mutex — park may have closed while waiting 
+  
     if (!park_open) {
         pthread_mutex_unlock(&ticket_mutex);
         pthread_exit(NULL);
@@ -62,7 +63,6 @@ void get_ride_ticket(int id)
  
     pthread_mutex_lock(&state_mutex);
 
-    // Increment the ticket queue
     ticket_queue_len++;
     log_event("Passenger %d entering the ticket queue", id);
  
@@ -107,11 +107,11 @@ void enter_ride_queue(int id)
 }
  
 void board_car(int id) 
-// handle passengers boarding the ride
+//  handle passenger boarding the ride by waiting for loading_open signal, 
+//  and send signals for boarding passengers. 
 {
     pthread_mutex_lock(&state_mutex);
  
-    // Wait until the car is ready for loading
     while (!loading_open && park_open) {
         pthread_cond_wait(&load_cond, &state_mutex);
     }
@@ -121,41 +121,50 @@ void board_car(int id)
         pthread_exit(NULL);
     }
  
-    // Board 
     car_passengers++;
     ride_queue_len--;
     last_board_time = time(NULL);
     log_event("Passenger %d is boarding", id);
  
-    // Signal car that a new passenger has boarded 
     pthread_cond_signal(&car_ready_cond);
  
     pthread_mutex_unlock(&state_mutex);
 }
  
 void unboard_car(int id) 
-// handle passengers unboarding the ride 
+//  handle passenger unboarding the ride. wait untill car is available to load.  
 {
     pthread_mutex_lock(&state_mutex);
- 
-    // Wait until car opens unloading 
+
     while (!unloading_open && park_open) {
         pthread_cond_wait(&unload_cond, &state_mutex);
+    }
+
+    if (!park_open) {
+        pthread_mutex_unlock(&state_mutex);
+        pthread_exit(NULL);
     }
  
     passengers_unboarded++;
     log_event("Passenger %d unboarded", id);
- 
+    pthread_cond_signal(&unload_cond);
     pthread_mutex_unlock(&state_mutex);
 }
  
-/* ─── Car Functions ──────────────────────────────────────────────────── */
+/* --- Car Functions ---------------------------------------------------- */
  
 void car_load(int id) 
-// load passengers into car 
+//  load passengers into car, one car at a time. Wait untill car is full 
+//  or semi-full and W seconds have passed. Release the loading bay after 
+//  all passengers are aboard and the doors are closed. The next car can 
+//  start loading while this one rides.
 {
-    // Only one car may load at a time 
     sem_wait(&loading_bay);
+
+    if (!park_open) {
+        sem_post(&loading_bay);
+        pthread_exit(NULL);
+    }
  
     pthread_mutex_lock(&state_mutex);
  
@@ -167,18 +176,17 @@ void car_load(int id)
  
     log_event("Car %d invoked load()", id);
  
-    // Broadcast so waiting passengers know loading is open 
     pthread_cond_broadcast(&load_cond);
  
-    // Wait until full OR partially full and W seconds have passed 
+    // Wait until full OR after sim.W seconds have passed 
     while (park_open) {
         if (car_passengers >= sim.P) {
-            // Car is full — depart immediately 
+            // Car is full —> depart immediately 
             break;
         }
  
         if (car_passengers > 0) {
-            // At least one passenger — wait up to W seconds for more 
+            // At least one passenger
             struct timespec deadline;
             clock_gettime(CLOCK_REALTIME, &deadline);
             deadline.tv_sec += sim.W;
@@ -193,7 +201,7 @@ void car_load(int id)
         }
     }
  
-    if (!park_open && car_passengers == 0) {
+    if (!park_open) {
         loading_open = 0;
         pthread_mutex_unlock(&state_mutex);
         sem_post(&loading_bay);
@@ -204,9 +212,7 @@ void car_load(int id)
     log_event("Car %d is full with %d passengers", id, car_passengers);
  
     pthread_mutex_unlock(&state_mutex);
- 
-    // Release the loading bay now — all passengers are aboard and the doors
-    // are closed. The next car can start loading while this one rides.      
+   
     sem_post(&loading_bay);
 }
  
@@ -219,7 +225,8 @@ void car_run(int id)
 }
  
 void car_unload(int id) 
-// unloaad passengers from car 
+//  unloaad passengers from car. Wait until every passanger has unboarded 
+//  before signaling that loading is open 
 {
     pthread_mutex_lock(&state_mutex);
  
@@ -242,10 +249,10 @@ void car_unload(int id)
     pthread_mutex_unlock(&state_mutex);
 }
  
-/* ─── Thread Behaviors ────────────────────────────────────────────── */
+/* --- Thread Behaviors ------------------------------------------------- */
  
 void *passenger_thread(void *arg) 
-// main behavior of pasanger threads 
+//  main behavior of pasanger thread. Continues while the park is still open. 
 {
     PassengerArg *parg = (PassengerArg *)arg;
     int id = parg->id;
@@ -253,7 +260,6 @@ void *passenger_thread(void *arg)
     log_event("Passenger %d entered the park", id);
  
     while (park_open) 
-    // continues while the park is still open 
     {
         if (!park_open) break;
         explore_park(id);
@@ -275,16 +281,15 @@ void *passenger_thread(void *arg)
 }
  
 void *car_thread(void *arg) 
-// main behavior for car threads
+//  main behavior for car thread. Continues while the park is open.
 {
     CarArg *carg = (CarArg *)arg;
     int id = carg->id;
  
     while (park_open) 
-    // continues while the park is open 
     {
         car_load(id);
-        if (!park_open && car_passengers == 0) break;
+        if (!park_open) break;
  
         car_run(id);
         car_unload(id);
