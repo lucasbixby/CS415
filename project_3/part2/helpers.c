@@ -221,6 +221,9 @@ void car_run(int id)
 {
     log_event("Car %d has departed to ride", id);
     sleep(sim.R); 
+    if (!park_open) {
+        return;
+    }
     log_event("Car %d has returned from the ride", id);
 }
  
@@ -229,6 +232,11 @@ void car_unload(int id)
 //  before signaling that loading is open 
 {
     pthread_mutex_lock(&state_mutex);
+
+    if (!park_open) {                    
+        pthread_mutex_unlock(&state_mutex);
+        return;
+    }
  
     unloading_open = 1;
     int total = car_passengers;
@@ -292,6 +300,8 @@ void *car_thread(void *arg)
         if (!park_open) break;
  
         car_run(id);
+        if (!park_open) break;
+        
         car_unload(id);
     }
  

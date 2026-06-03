@@ -1,0 +1,355 @@
+==1849760== Memcheck, a memory error detector
+==1849760== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1849760== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==1849760== Command: ./park -n 30 -c 4 -p 2 -w 3 -r 2 -t 60 -j 10
+==1849760== 
+- Number of passenger threads: 30
+- Number of cars: 4
+- Capacity per car: 2
+- Car waiting period: 3
+- Car ride duration: 2
+- Park duration: 60 seconds
+- Max ride queue size: 10
+
+[Time: 0] Car 0 invoked load()
+[Time: 0] Passenger 13 entered the park
+[Time: 0] Passenger 13 is exploring the park
+[Time: 0] Passenger 14 entered the park
+[Time: 0] Passenger 14 is exploring the park
+[Time: 0] Passenger 15 entered the park
+[Time: 0] Passenger 15 is exploring the park
+[Time: 0] Passenger 16 entered the park
+[Time: 0] Passenger 16 is exploring the park
+[Time: 0] Passenger 18 entered the park
+[Time: 0] Passenger 18 is exploring the park
+[Time: 0] Passenger 7 entered the park
+[Time: 0] Passenger 7 is exploring the park
+[Time: 0] Passenger 20 entered the park
+[Time: 0] Passenger 20 is exploring the park
+[Time: 0] Passenger 21 entered the park
+[Time: 0] Passenger 21 is exploring the park
+[Time: 0] Passenger 2 entered the park
+[Time: 0] Passenger 2 is exploring the park
+[Time: 0] Passenger 23 entered the park
+[Time: 0] Passenger 23 is exploring the park
+[Time: 0] Passenger 10 entered the park
+[Time: 0] Passenger 10 is exploring the park
+[Time: 0] Passenger 26 entered the park
+[Time: 0] Passenger 26 is exploring the park
+[Time: 0] Passenger 27 entered the park
+[Time: 0] Passenger 27 is exploring the park
+[Time: 0] Passenger 12 entered the park
+[Time: 0] Passenger 12 is exploring the park
+[Time: 0] Passenger 4 entered the park
+[Time: 0] Passenger 4 is exploring the park
+[Time: 0] Passenger 5 entered the park
+[Time: 0] Passenger 5 is exploring the park
+[Time: 0] Passenger 6 entered the park
+[Time: 0] Passenger 6 is exploring the park
+[Time: 0] Passenger 1 entered the park
+[Time: 0] Passenger 1 is exploring the park
+[Time: 0] Passenger 8 entered the park
+[Time: 0] Passenger 8 is exploring the park
+[Time: 0] Passenger 9 entered the park
+[Time: 0] Passenger 9 is exploring the park
+[Time: 0] Passenger 25 entered the park
+[Time: 0] Passenger 25 is exploring the park
+[Time: 0] Passenger 11 entered the park
+[Time: 0] Passenger 11 is exploring the park
+[Time: 0] Passenger 29 entered the park
+[Time: 0] Passenger 29 is exploring the park
+[Time: 0] Passenger 17 entered the park
+[Time: 0] Passenger 17 is exploring the park
+[Time: 0] Passenger 22 entered the park
+[Time: 0] Passenger 22 is exploring the park
+[Time: 0] Passenger 3 entered the park
+[Time: 0] Passenger 3 is exploring the park
+[Time: 0] Passenger 0 entered the park
+[Time: 0] Passenger 0 is exploring the park
+[Time: 0] Passenger 24 entered the park
+[Time: 0] Passenger 24 is exploring the park
+[Time: 0] Passenger 19 entered the park
+[Time: 0] Passenger 19 is exploring the park
+[Time: 0] Passenger 28 entered the park
+[Time: 0] Passenger 28 is exploring the park
+[Time: 1] Passenger 27 finished exploring, entering the ticket booth
+[Time: 1] Passenger 27 entering the ticket queue
+[Time: 1] Passenger 6 finished exploring, entering the ticket booth
+[Time: 1] Passenger 3 finished exploring, entering the ticket booth
+[Time: 2] Passenger 23 finished exploring, entering the ticket booth
+[Time: 2] Passenger 25 finished exploring, entering the ticket booth
+[Time: 3] Passenger 21 finished exploring, entering the ticket booth
+[Time: 3] Passenger 10 finished exploring, entering the ticket booth
+[Time: 3] Passenger 27 acquired a ticket
+[Time: 3] Passenger 27 has entered the ride queue
+[Time: 3] Passenger 27 is boarding
+[Time: 3] Passenger 8 finished exploring, entering the ticket booth
+[Time: 3] Passenger 6 entering the ticket queue
+[Time: 3] Passenger 22 finished exploring, entering the ticket booth
+[Time: 3] Passenger 0 finished exploring, entering the ticket booth
+[Time: 4] Passenger 13 finished exploring, entering the ticket booth
+[Time: 4] Passenger 18 finished exploring, entering the ticket booth
+[Time: 4] Passenger 4 finished exploring, entering the ticket booth
+[Time: 4] Passenger 24 finished exploring, entering the ticket booth
+[Time: 5] Passenger 6 acquired a ticket
+[Time: 5] Passenger 6 has entered the ride queue
+[Time: 5] Passenger 6 is boarding
+[Time: 5] Passenger 3 entering the ticket queue
+[Time: 5] Car 0 is full with 2 passengers
+[Time: 5] Car 0 has departed to ride
+[Time: 5] Car 2 invoked load()
+[Time: 6] Passenger 16 finished exploring, entering the ticket booth
+[Time: 6] Passenger 7 finished exploring, entering the ticket booth
+[Time: 6] Passenger 28 finished exploring, entering the ticket booth
+[Time: 7] Passenger 14 finished exploring, entering the ticket booth
+[Time: 7] Passenger 20 finished exploring, entering the ticket booth
+[Time: 7] Passenger 5 finished exploring, entering the ticket booth
+[Time: 7] Passenger 1 finished exploring, entering the ticket booth
+[Time: 7] Passenger 9 finished exploring, entering the ticket booth
+[Time: 7] Passenger 3 acquired a ticket
+[Time: 7] Passenger 3 has entered the ride queue
+[Time: 7] Passenger 3 is boarding
+[Time: 7] Passenger 23 entering the ticket queue
+[Time: 7] Car 0 has returned from the ride
+[Time: 7] Car 0 has invoked unload()
+[Time: 7] Passenger 3 unboarded
+[Time: 7] Passenger 3 is exploring the park
+[Time: 8] Passenger 15 finished exploring, entering the ticket booth
+[Time: 8] Passenger 26 finished exploring, entering the ticket booth
+[Time: 8] Passenger 29 finished exploring, entering the ticket booth
+[Time: 8] Passenger 19 finished exploring, entering the ticket booth
+[Time: 9] Passenger 11 finished exploring, entering the ticket booth
+[Time: 9] Passenger 23 acquired a ticket
+[Time: 9] Passenger 23 has entered the ride queue
+[Time: 9] Passenger 23 is boarding
+[Time: 9] Car 2 is full with 2 passengers
+[Time: 9] Car 2 has departed to ride
+[Time: 9] Passenger 25 entering the ticket queue
+[Time: 9] Car 1 invoked load()
+[Time: 10] Passenger 2 finished exploring, entering the ticket booth
+[Time: 10] Passenger 12 finished exploring, entering the ticket booth
+[Time: 10] Passenger 17 finished exploring, entering the ticket booth
+[Time: 11] Car 2 has returned from the ride
+[Time: 11] Car 2 has invoked unload()
+[Time: 11] Passenger 25 acquired a ticket
+[Time: 11] Passenger 25 has entered the ride queue
+[Time: 11] Passenger 25 is boarding
+[Time: 11] Passenger 21 entering the ticket queue
+[Time: 13] Passenger 21 acquired a ticket
+[Time: 13] Passenger 21 has entered the ride queue
+[Time: 13] Passenger 21 is boarding
+[Time: 13] Passenger 10 entering the ticket queue
+[Time: 13] Car 1 is full with 2 passengers
+[Time: 13] Car 1 has departed to ride
+[Time: 13] Car 3 invoked load()
+[Time: 15] Passenger 10 acquired a ticket
+[Time: 15] Car 1 has returned from the ride
+[Time: 15] Passenger 10 has entered the ride queue
+[Time: 15] Passenger 10 is boarding
+[Time: 15] Passenger 8 entering the ticket queue
+[Time: 15] Car 1 has invoked unload()
+[Time: 15] Passenger 10 unboarded
+[Time: 15] Passenger 10 is exploring the park
+[Time: 17] Passenger 3 finished exploring, entering the ticket booth
+[Time: 17] Passenger 8 acquired a ticket
+[Time: 17] Passenger 8 has entered the ride queue
+[Time: 17] Passenger 8 is boarding
+[Time: 17] Car 3 is full with 2 passengers
+[Time: 17] Car 0 invoked load()
+[Time: 17] Car 3 has departed to ride
+[Time: 17] Passenger 22 entering the ticket queue
+[Time: 18] Passenger 10 finished exploring, entering the ticket booth
+[Time: 19] Car 3 has returned from the ride
+[Time: 19] Passenger 22 acquired a ticket
+[Time: 19] Passenger 22 has entered the ride queue
+[Time: 19] Passenger 22 is boarding
+[Time: 19] Passenger 0 entering the ticket queue
+[Time: 19] Car 3 has invoked unload()
+[Time: 19] Passenger 21 unboarded
+[Time: 19] Passenger 21 is exploring the park
+[Time: 21] Passenger 0 acquired a ticket
+[Time: 21] Passenger 0 has entered the ride queue
+[Time: 21] Passenger 0 is boarding
+[Time: 21] Passenger 13 entering the ticket queue
+[Time: 21] Car 0 is full with 2 passengers
+[Time: 21] Car 0 has departed to ride
+[Time: 21] Car 2 invoked load()
+[Time: 22] Passenger 21 finished exploring, entering the ticket booth
+[Time: 23] Passenger 13 acquired a ticket
+[Time: 23] Passenger 13 has entered the ride queue
+[Time: 23] Car 0 has returned from the ride
+[Time: 23] Passenger 13 is boarding
+[Time: 23] Car 0 has invoked unload()
+[Time: 23] Passenger 8 unboarded
+[Time: 23] Passenger 8 is exploring the park
+[Time: 23] Passenger 23 unboarded
+[Time: 23] Passenger 23 is exploring the park
+[Time: 23] Passenger 13 unboarded
+[Time: 23] Passenger 13 is exploring the park
+[Time: 23] Passenger 25 unboarded
+[Time: 23] Passenger 25 is exploring the park
+[Time: 23] Passenger 0 unboarded
+[Time: 23] Passenger 0 is exploring the park
+[Time: 23] Passenger 27 unboarded
+[Time: 23] Passenger 27 is exploring the park
+[Time: 23] Passenger 6 unboarded
+[Time: 23] Passenger 6 is exploring the park
+[Time: 23] Passenger 18 entering the ticket queue
+[Time: 23] Passenger 22 unboarded
+[Time: 23] Passenger 22 is exploring the park
+[Time: 25] Passenger 27 finished exploring, entering the ticket booth
+[Time: 25] Passenger 18 acquired a ticket
+[Time: 25] Passenger 18 has entered the ride queue
+[Time: 25] Passenger 18 is boarding
+[Time: 25] Car 2 is full with 2 passengers
+[Time: 25] Passenger 4 entering the ticket queue
+[Time: 25] Car 2 has departed to ride
+[Time: 25] Car 1 invoked load()
+[Time: 26] Passenger 6 finished exploring, entering the ticket booth
+[Time: 27] Passenger 25 finished exploring, entering the ticket booth
+[Time: 27] Passenger 4 acquired a ticket
+[Time: 27] Passenger 4 has entered the ride queue
+[Time: 27] Passenger 4 is boarding
+[Time: 27] Passenger 24 entering the ticket queue
+[Time: 27] Car 2 has returned from the ride
+[Time: 27] Car 2 has invoked unload()
+[Time: 27] Passenger 18 unboarded
+[Time: 27] Passenger 18 is exploring the park
+[Time: 29] Passenger 24 acquired a ticket
+[Time: 29] Passenger 24 has entered the ride queue
+[Time: 29] Passenger 24 is boarding
+[Time: 29] Car 1 is full with 2 passengers
+[Time: 29] Car 1 has departed to ride
+[Time: 29] Passenger 16 entering the ticket queue
+[Time: 29] Car 3 invoked load()
+[Time: 30] Passenger 0 finished exploring, entering the ticket booth
+[Time: 31] Passenger 13 finished exploring, entering the ticket booth
+[Time: 31] Passenger 18 finished exploring, entering the ticket booth
+[Time: 31] Car 1 has returned from the ride
+[Time: 31] Car 1 has invoked unload()
+[Time: 31] Passenger 16 acquired a ticket
+[Time: 31] Passenger 16 has entered the ride queue
+[Time: 31] Passenger 16 is boarding
+[Time: 31] Passenger 7 entering the ticket queue
+[Time: 32] Passenger 8 finished exploring, entering the ticket booth
+[Time: 33] Passenger 23 finished exploring, entering the ticket booth
+[Time: 33] Passenger 22 finished exploring, entering the ticket booth
+[Time: 33] Passenger 7 acquired a ticket
+[Time: 33] Passenger 7 has entered the ride queue
+[Time: 33] Passenger 7 is boarding
+[Time: 33] Passenger 28 entering the ticket queue
+[Time: 33] Car 3 is full with 2 passengers
+[Time: 33] Car 3 has departed to ride
+[Time: 33] Car 0 invoked load()
+[Time: 35] Passenger 28 acquired a ticket
+[Time: 35] Car 3 has returned from the ride
+[Time: 35] Passenger 28 has entered the ride queue
+[Time: 35] Passenger 28 is boarding
+[Time: 35] Car 3 has invoked unload()
+[Time: 35] Passenger 4 unboarded
+[Time: 35] Passenger 4 is exploring the park
+[Time: 35] Passenger 14 entering the ticket queue
+[Time: 37] Passenger 4 finished exploring, entering the ticket booth
+[Time: 37] Passenger 14 acquired a ticket
+[Time: 37] Passenger 14 has entered the ride queue
+[Time: 37] Passenger 14 is boarding
+[Time: 37] Passenger 20 entering the ticket queue
+[Time: 37] Car 0 is full with 2 passengers
+[Time: 37] Car 0 has departed to ride
+[Time: 37] Car 2 invoked load()
+[Time: 39] Passenger 20 acquired a ticket
+[Time: 39] Passenger 20 has entered the ride queue
+[Time: 39] Passenger 20 is boarding
+[Time: 39] Passenger 5 entering the ticket queue
+[Time: 39] Car 0 has returned from the ride
+[Time: 39] Car 0 has invoked unload()
+[Time: 39] Passenger 20 unboarded
+[Time: 39] Passenger 20 is exploring the park
+[Time: 41] Passenger 5 acquired a ticket
+[Time: 41] Passenger 5 has entered the ride queue
+[Time: 41] Passenger 5 is boarding
+[Time: 41] Car 2 is full with 2 passengers
+[Time: 41] Car 2 has departed to ride
+[Time: 41] Passenger 1 entering the ticket queue
+[Time: 41] Car 1 invoked load()
+[Time: 43] Car 2 has returned from the ride
+[Time: 43] Car 2 has invoked unload()
+[Time: 43] Passenger 1 acquired a ticket
+[Time: 43] Passenger 1 has entered the ride queue
+[Time: 43] Passenger 1 is boarding
+[Time: 43] Passenger 9 entering the ticket queue
+[Time: 46] Passenger 9 acquired a ticket
+[Time: 46] Passenger 9 has entered the ride queue
+[Time: 46] Passenger 9 is boarding
+[Time: 46] Car 1 is full with 2 passengers
+[Time: 46] Car 1 has departed to ride
+[Time: 46] Passenger 15 entering the ticket queue
+[Time: 46] Car 3 invoked load()
+[Time: 48] Car 1 has returned from the ride
+[Time: 48] Passenger 15 acquired a ticket
+[Time: 48] Passenger 15 has entered the ride queue
+[Time: 48] Passenger 15 is boarding
+[Time: 48] Car 1 has invoked unload()
+[Time: 48] Passenger 16 unboarded
+[Time: 48] Passenger 16 is exploring the park
+[Time: 48] Passenger 26 entering the ticket queue
+[Time: 49] Passenger 20 finished exploring, entering the ticket booth
+[Time: 50] Passenger 26 acquired a ticket
+[Time: 50] Passenger 26 has entered the ride queue
+[Time: 50] Passenger 26 is boarding
+[Time: 50] Passenger 29 entering the ticket queue
+[Time: 50] Car 3 is full with 2 passengers
+[Time: 50] Car 3 has departed to ride
+[Time: 50] Car 0 invoked load()
+[Time: 52] Passenger 29 acquired a ticket
+[Time: 52] Passenger 29 has entered the ride queue
+[Time: 52] Passenger 29 is boarding
+[Time: 52] Car 3 has returned from the ride
+[Time: 52] Passenger 19 entering the ticket queue
+[Time: 52] Car 3 has invoked unload()
+[Time: 52] Passenger 28 unboarded
+[Time: 52] Passenger 28 is exploring the park
+[Time: 52] Passenger 9 unboarded
+[Time: 52] Passenger 9 is exploring the park
+[Time: 53] Passenger 16 finished exploring, entering the ticket booth
+[Time: 54] Passenger 19 acquired a ticket
+[Time: 54] Passenger 19 has entered the ride queue
+[Time: 54] Passenger 19 is boarding
+[Time: 54] Car 0 is full with 2 passengers
+[Time: 54] Passenger 11 entering the ticket queue
+[Time: 54] Car 0 has departed to ride
+[Time: 54] Car 2 invoked load()
+[Time: 56] Car 0 has returned from the ride
+[Time: 56] Passenger 11 acquired a ticket
+[Time: 56] Passenger 11 has entered the ride queue
+[Time: 56] Passenger 11 is boarding
+[Time: 56] Car 0 has invoked unload()
+[Time: 56] Passenger 24 unboarded
+[Time: 56] Passenger 24 is exploring the park
+[Time: 56] Passenger 2 entering the ticket queue
+[Time: 58] Passenger 2 acquired a ticket
+[Time: 58] Passenger 2 has entered the ride queue
+[Time: 58] Passenger 2 is boarding
+[Time: 58] Passenger 12 entering the ticket queue
+[Time: 58] Car 2 is full with 2 passengers
+[Time: 58] Car 2 has departed to ride
+[Time: 58] Car 1 invoked load()
+[Time: 60] Passenger 28 finished exploring, entering the ticket booth
+[Time: 60] Passenger 12 acquired a ticket
+[Time: 60] Car 2 has returned from the ride
+[Time: 60] Passenger 17 entering the ticket queue
+[Time: 60] Car 2 has invoked unload()
+[Time: 60] Passenger 12 has entered the ride queue
+[Time: 60] Passenger 12 is boarding
+
+========== PARK CLOSED ==========
+
+==1849760== 
+==1849760== HEAP SUMMARY:
+==1849760==     in use at exit: 0 bytes in 0 blocks
+==1849760==   total heap usage: 46 allocs, 46 frees, 21,950 bytes allocated
+==1849760== 
+==1849760== All heap blocks were freed -- no leaks are possible
+==1849760== 
+==1849760== For lists of detected and suppressed errors, rerun with: -s
+==1849760== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
