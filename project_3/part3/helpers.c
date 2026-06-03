@@ -349,6 +349,11 @@ void car_unload(int id)
 {
     pthread_mutex_lock(&state_mutex);
 
+    if (!park_open) {                    
+        pthread_mutex_unlock(&state_mutex);
+        return;
+    }
+
     car_states[id] = CAR_UNLOADING; 
 
     int total = car_passengers;      
@@ -412,18 +417,13 @@ void *car_thread(void *arg)
     CarArg *carg = (CarArg *)arg;
     int id = carg->id;
 
-    while (park_open) {
+    while (park_open) 
+    {
         car_load(id);
-
-        if (!park_open) {
-            break;
-        }
+        if (!park_open) break;
 
         car_run(id);
-
-        if (!park_open) {
-            break;
-        }
+        if (!park_open) break;
 
         car_unload(id);
     }
