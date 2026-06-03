@@ -31,13 +31,15 @@ volatile int park_open = 1;
  
 int ticket_queue_len = 0;
 int ride_queue_len = 0;
-int car_passengers = 0;
+int *car_passengers;
 time_t last_board_time = 0;
 
 // part3: passenger trackers 
 int exploring = 0; 
 int waiting_in_car = 0;
 int riding = 0; 
+int loading_car_id = -1;
+int unloading_car_id = -1;
 // part3: final stat trackers 
 int total_passengers_served = 0;
 int total_rides = 0;
@@ -58,8 +60,9 @@ pthread_mutex_t ticket_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t ride_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
  
 int loading_open = 0;
-int unloading_open = 0;
-int passengers_unboarded = 0;
+int *unloading_open;
+int *passengers_unboarded;
+int *passenger_car;
 
 // part3: initialize global arrays for tracking status 
 CarState *car_states;
@@ -177,6 +180,10 @@ int main(int argc, char *argv[])
     ride_queue                   = malloc(sim.N * sizeof(int));
     ticket_enter_time            = calloc(sim.N, sizeof(time_t));
     ride_enter_time              = calloc(sim.N, sizeof(time_t));
+    car_passengers               = calloc(sim.C, sizeof(int));
+    passengers_unboarded         = calloc(sim.C, sizeof(int));
+    unloading_open               = calloc(sim.C, sizeof(int));
+    passenger_car                = calloc(sim.N, sizeof(int));
 
     if (!passenger_threads || !car_threads || !p_args || !c_args || !car_states || !car_load_counts || !ticket_queue || !ride_queue) {
         fprintf(stderr, "Error: failed to allocate thread memory.\n");
@@ -247,6 +254,10 @@ int main(int argc, char *argv[])
     free(c_args);
 
     // part3: free system status tracking memory 
+    free(passenger_car);
+    free(unloading_open);
+    free(passengers_unboarded);
+    free(car_passengers);
     free(ticket_enter_time);
     free(ride_enter_time);
     free(car_states);

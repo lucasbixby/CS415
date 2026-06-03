@@ -82,7 +82,7 @@ void log_system_state()
         double utilization = (double)avg_load / sim.P * 100.0;
 
         printf("[Monitor] FINAL STATISTICS:\n");
-        printf("Total Simulation Time:        [Time: %d]\n", get_elapsed());
+        printf("Total Simulation Time:        [Time: %d]\n", sim.T);
         printf("Total Passengers Served:      %d\n",         total_passengers_served);
         printf("Total Rides:                  %d\n",         total_rides);
         printf("Average Ticket Queue Seconds: %.1f\n",       avg_ticket);
@@ -143,27 +143,31 @@ void get_ride_ticket(int id)
 //  Only one passenger can use the ticket booth at a time, simulates ticket processing 
 //  time and accounts for park closing while passengers waiting in line. 
 {
+    pthread_mutex_lock(&state_mutex);
+    enqueue(ticket_queue_mutex, ticket_queue, ticket_queue_len, id);
+    ticket_queue_len++;
+    ticket_enter_time[id] = time(NULL);
+    log_event("Passenger %d entering the ticket queue", id);
+    pthread_mutex_unlock(&state_mutex);
+
     pthread_mutex_lock(&ticket_mutex);
-  
+
     if (!park_open) {
+        pthread_mutex_lock(&state_mutex);
+        dequeue(ticket_queue_mutex, ticket_queue, ticket_queue_len);
+        ticket_queue_len--;
+        pthread_mutex_unlock(&state_mutex);
         pthread_mutex_unlock(&ticket_mutex);
         pthread_exit(NULL);
     }
- 
+
     pthread_mutex_lock(&state_mutex);
 
-    // Add id to the ticket_queue
-    enqueue(ticket_queue_mutex, ticket_queue, ticket_queue_len, id);
-    ticket_queue_len++;
-    ticket_enter_time[id] = time(NULL); 
-
-    log_event("Passenger %d entering the ticket queue", id);
- 
-    // Block if ride queue is full — ticket cannot be issued 
+    // Block if ride queue is full
     while (ride_queue_len >= sim.J && park_open) {
         pthread_cond_wait(&ride_q_cond, &state_mutex);
     }
- 
+
     if (!park_open) {
         dequeue(ticket_queue_mutex, ticket_queue, ticket_queue_len);
         ticket_queue_len--;
@@ -171,8 +175,8 @@ void get_ride_ticket(int id)
         pthread_mutex_unlock(&ticket_mutex);
         pthread_exit(NULL);
     }
- 
-    // Simulate ticket processing time 
+
+    // Simulate ticket processing time
     pthread_mutex_unlock(&state_mutex);
     sleep(2);
     pthread_mutex_lock(&state_mutex);
@@ -184,14 +188,11 @@ void get_ride_ticket(int id)
         pthread_mutex_unlock(&ticket_mutex);
         pthread_exit(NULL);
     }
- 
-    // remove first in line from queue 
+
+    // Dequeue and record stats on successful ticket
     dequeue(ticket_queue_mutex, ticket_queue, ticket_queue_len);
     ticket_queue_len--;
-
-    // pthread_mutex_lock(&state_mutex);  
-    total_ticket_queue_secs += difftime(time(NULL), ticket_enter_time[id]);  
-
+    total_ticket_queue_secs += difftime(time(NULL), ticket_enter_time[id]);
     log_event("Passenger %d acquired a ticket", id);
     pthread_mutex_unlock(&state_mutex);
     pthread_mutex_unlock(&ticket_mutex);
@@ -223,8 +224,8 @@ void board_car(int id)
         pthread_exit(NULL);
     }
  
-    car_passengers++;
-
+    car_passengers[loading_car_id]++;
+    passenger_car[id] = loading_car_id;
     waiting_in_car++;
     dequeue(ride_queue_mutex, ride_queue, ride_queue_len);
     ride_queue_len--;
@@ -242,7 +243,9 @@ void unboard_car(int id)
 {
     pthread_mutex_lock(&state_mutex);
 
-    while (!unloading_open && park_open) {
+    int my_car = passenger_car[id];   
+
+    while (!unloading_open[my_car] && park_open) {
         pthread_cond_wait(&unload_cond, &state_mutex);
     }
 
@@ -251,7 +254,7 @@ void unboard_car(int id)
         pthread_exit(NULL);
     }
 
-    passengers_unboarded++;
+    passengers_unboarded[my_car]++;
     total_passengers_served++;
     log_event("Passenger %d unboarded", id);
     pthread_cond_signal(&unload_cond);
@@ -277,22 +280,21 @@ void car_load(int id)
  
     // Reset all per-trip state before opening doors 
     loading_open = 1;
-    unloading_open = 0;   
-    passengers_unboarded = 0;
-    car_passengers = 0;
+    car_passengers[id] = 0;
  
     log_event("Car %d invoked load()", id);
- 
+
+    loading_car_id = id;
     pthread_cond_broadcast(&load_cond);
  
     // Wait until full OR after sim.W seconds have passed 
     while (park_open) {
-        if (car_passengers >= sim.P) {
+        if (car_passengers[id] >= sim.P) {
             // Car is full — depart immediately 
             break;
         }
  
-        if (car_passengers > 0) {
+        if (car_passengers[id] > 0) {
             // At least one passenger
             struct timespec deadline;
             clock_gettime(CLOCK_REALTIME, &deadline);
@@ -300,13 +302,13 @@ void car_load(int id)
  
             int rc = pthread_cond_timedwait(&car_ready_cond, &state_mutex, &deadline);
  
-            if (car_passengers >= sim.P) break;          
-            if (rc != 0 && car_passengers > 0) break;  
+            if (car_passengers[id] >= sim.P) break;          
+            if (rc != 0 && car_passengers[id] > 0) break;  
         } else {
             // No passengers — wait indefinitely 
             pthread_cond_wait(&car_ready_cond, &state_mutex);
         }
-        car_load_counts[id] = car_passengers;
+        car_load_counts[id] = car_passengers[id];
     }
  
     if (!park_open) {
@@ -316,9 +318,9 @@ void car_load(int id)
         pthread_exit(NULL);
     }
  
-    car_load_counts[id] = car_passengers;
+    car_load_counts[id] = car_passengers[id];
     loading_open = 0;
-    log_event("Car %d is full with %d passengers", id, car_passengers);
+    log_event("Car %d is full with %d passengers", id, car_passengers[id]);
  
     pthread_mutex_unlock(&state_mutex);
    
@@ -330,7 +332,7 @@ void car_run(int id)
 {   
     pthread_mutex_lock(&state_mutex);
     car_states[id] = CAR_RIDING;   
-    riding += car_passengers;       
+    riding += car_passengers[id];       
     waiting_in_car = 0; 
     total_rides++;           
     pthread_mutex_unlock(&state_mutex);
@@ -349,34 +351,30 @@ void car_unload(int id)
 {
     pthread_mutex_lock(&state_mutex);
 
-    if (!park_open) {                    
+    if (!park_open) {
         pthread_mutex_unlock(&state_mutex);
         return;
     }
 
-    car_states[id] = CAR_UNLOADING; 
+    car_states[id] = CAR_UNLOADING;
+    int total = car_passengers[id];
+    riding -= total;
 
-    int total = car_passengers;      
-    riding -= total;                    
- 
-    unloading_open = 1;
- 
+    unloading_car_id = id;
+    passengers_unboarded[id] = 0; 
+    unloading_open[id] = 1;
+
     log_event("Car %d has invoked unload()", id);
     pthread_cond_broadcast(&unload_cond);
- 
-    // Wait until every passenger has unboarded 
-    while (passengers_unboarded < total && park_open) {
+
+    while (passengers_unboarded[id] < total && park_open) {
         pthread_cond_wait(&unload_cond, &state_mutex);
     }
- 
-    unloading_open = 0;
 
-    car_states[id]      = CAR_WAITING;  
-    car_load_counts[id] = 0;            
- 
-    // Signal ride queue that spots may have opened 
+    unloading_open[id] = 0;
+    car_states[id] = CAR_WAITING;
+    car_load_counts[id] = 0;
     pthread_cond_broadcast(&ride_q_cond);
- 
     pthread_mutex_unlock(&state_mutex);
 }
  

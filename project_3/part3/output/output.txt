@@ -9,16 +9,18 @@
 [Time: 0] Car 0 invoked load()
 [Time: 0] Passenger 0 entered the park
 [Time: 0] Passenger 0 is exploring the park
-[Time: 0] Passenger 1 entered the park
-[Time: 0] Passenger 1 is exploring the park
 [Time: 0] Passenger 2 entered the park
 [Time: 0] Passenger 2 is exploring the park
+[Time: 0] Passenger 3 entered the park
+[Time: 0] Passenger 3 is exploring the park
 [Time: 0] Passenger 4 entered the park
 [Time: 0] Passenger 4 is exploring the park
 [Time: 0] Passenger 5 entered the park
 [Time: 0] Passenger 5 is exploring the park
 [Time: 0] Passenger 6 entered the park
 [Time: 0] Passenger 6 is exploring the park
+[Time: 0] Passenger 7 entered the park
+[Time: 0] Passenger 7 is exploring the park
 [Time: 0] Passenger 8 entered the park
 [Time: 0] Passenger 8 is exploring the park
 [Time: 0] Passenger 9 entered the park
@@ -31,8 +33,8 @@
 [Time: 0] Passenger 12 is exploring the park
 [Time: 0] Passenger 13 entered the park
 [Time: 0] Passenger 13 is exploring the park
-[Time: 0] Passenger 14 entered the park
-[Time: 0] Passenger 14 is exploring the park
+[Time: 0] Passenger 15 entered the park
+[Time: 0] Passenger 15 is exploring the park
 [Time: 0] Passenger 16 entered the park
 [Time: 0] Passenger 16 is exploring the park
 [Time: 0] Passenger 17 entered the park
@@ -51,421 +53,460 @@
 [Time: 0] Passenger 23 is exploring the park
 [Time: 0] Passenger 24 entered the park
 [Time: 0] Passenger 24 is exploring the park
+[Time: 0] Passenger 25 entered the park
+[Time: 0] Passenger 25 is exploring the park
 [Time: 0] Passenger 26 entered the park
 [Time: 0] Passenger 26 is exploring the park
+[Time: 0] Passenger 27 entered the park
+[Time: 0] Passenger 27 is exploring the park
 [Time: 0] Passenger 28 entered the park
 [Time: 0] Passenger 28 is exploring the park
 [Time: 0] Passenger 29 entered the park
 [Time: 0] Passenger 29 is exploring the park
-[Time: 0] Passenger 7 entered the park
-[Time: 0] Passenger 7 is exploring the park
-[Time: 0] Passenger 15 entered the park
-[Time: 0] Passenger 15 is exploring the park
-[Time: 0] Passenger 25 entered the park
-[Time: 0] Passenger 25 is exploring the park
-[Time: 0] Passenger 27 entered the park
-[Time: 0] Passenger 27 is exploring the park
-[Time: 0] Passenger 3 entered the park
-[Time: 0] Passenger 3 is exploring the park
-[Time: 1] Passenger 14 finished exploring, entering the ticket booth
-[Time: 1] Passenger 14 entering the ticket queue
-[Time: 1] Passenger 19 finished exploring, entering the ticket booth
-[Time: 1] Passenger 7 finished exploring, entering the ticket booth
-[Time: 2] Passenger 11 finished exploring, entering the ticket booth
-[Time: 2] Passenger 23 finished exploring, entering the ticket booth
-[Time: 3] Passenger 9 finished exploring, entering the ticket booth
-[Time: 3] Passenger 12 finished exploring, entering the ticket booth
-[Time: 3] Passenger 14 acquired a ticket
-[Time: 3] Passenger 14 has entered the ride queue
-[Time: 3] Passenger 14 is boarding
-[Time: 3] Passenger 19 entering the ticket queue
-[Time: 3] Passenger 21 finished exploring, entering the ticket booth
-[Time: 3] Passenger 29 finished exploring, entering the ticket booth
-[Time: 3] Passenger 15 finished exploring, entering the ticket booth
+[Time: 0] Passenger 1 entered the park
+[Time: 0] Passenger 1 is exploring the park
+[Time: 0] Passenger 14 entered the park
+[Time: 0] Passenger 14 is exploring the park
+[Time: 1] Passenger 13 finished exploring, entering the ticket booth
+[Time: 1] Passenger 13 entering the ticket queue
+[Time: 1] Passenger 18 finished exploring, entering the ticket booth
+[Time: 1] Passenger 18 entering the ticket queue
+[Time: 1] Passenger 27 finished exploring, entering the ticket booth
+[Time: 1] Passenger 27 entering the ticket queue
+[Time: 2] Passenger 10 finished exploring, entering the ticket booth
+[Time: 2] Passenger 10 entering the ticket queue
+[Time: 2] Passenger 22 finished exploring, entering the ticket booth
+[Time: 2] Passenger 22 entering the ticket queue
+[Time: 3] Passenger 8 finished exploring, entering the ticket booth
+[Time: 3] Passenger 8 entering the ticket queue
+[Time: 3] Passenger 11 finished exploring, entering the ticket booth
+[Time: 3] Passenger 11 entering the ticket queue
+[Time: 3] Passenger 13 acquired a ticket
+[Time: 3] Passenger 13 has entered the ride queue
+[Time: 3] Passenger 13 is boarding
+[Time: 3] Passenger 20 finished exploring, entering the ticket booth
+[Time: 3] Passenger 20 entering the ticket queue
+[Time: 3] Passenger 26 finished exploring, entering the ticket booth
+[Time: 3] Passenger 26 entering the ticket queue
+[Time: 3] Passenger 28 finished exploring, entering the ticket booth
+[Time: 3] Passenger 28 entering the ticket queue
 [Time: 4] Passenger 0 finished exploring, entering the ticket booth
+[Time: 4] Passenger 0 entering the ticket queue
 [Time: 4] Passenger 5 finished exploring, entering the ticket booth
-[Time: 4] Passenger 17 finished exploring, entering the ticket booth
-[Time: 4] Passenger 25 finished exploring, entering the ticket booth
+[Time: 4] Passenger 5 entering the ticket queue
+[Time: 4] Passenger 16 finished exploring, entering the ticket booth
+[Time: 4] Passenger 16 entering the ticket queue
+[Time: 4] Passenger 29 finished exploring, entering the ticket booth
+[Time: 4] Passenger 29 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 19]
+Ticket Queue: [Passenger 18, Passenger 27, Passenger 10, Passenger 22, Passenger 8, Passenger 11, Passenger 20, Passenger 26, Passenger 28, Passenger 0, Passenger 5, Passenger 16, Passenger 29]
 Ride Queue: []
 Car 0: WAITING (1/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (16 exploring, 1 in queues, 1 waiting in car, 0 riding)
+Passengers in the park: 30 (16 exploring, 13 in queues, 1 waiting in car, 0 riding)
 
-[Time: 5] Passenger 19 acquired a ticket
-[Time: 5] Passenger 19 has entered the ride queue
-[Time: 5] Passenger 19 is boarding
-[Time: 5] Passenger 7 entering the ticket queue
+[Time: 5] Passenger 18 acquired a ticket
+[Time: 5] Passenger 18 has entered the ride queue
+[Time: 5] Passenger 18 is boarding
 [Time: 5] Car 0 is full with 2 passengers
 [Time: 5] Car 0 has departed to ride
 [Time: 5] Car 1 invoked load()
 [Time: 6] Passenger 4 finished exploring, entering the ticket booth
+[Time: 6] Passenger 4 entering the ticket queue
 [Time: 6] Passenger 6 finished exploring, entering the ticket booth
-[Time: 6] Passenger 3 finished exploring, entering the ticket booth
-[Time: 7] Passenger 1 finished exploring, entering the ticket booth
-[Time: 7] Passenger 8 finished exploring, entering the ticket booth
-[Time: 7] Passenger 18 finished exploring, entering the ticket booth
-[Time: 7] Passenger 7 acquired a ticket
-[Time: 7] Passenger 7 has entered the ride queue
-[Time: 7] Passenger 7 is boarding
-[Time: 7] Passenger 11 entering the ticket queue
-[Time: 7] Passenger 20 finished exploring, entering the ticket booth
-[Time: 7] Passenger 22 finished exploring, entering the ticket booth
+[Time: 6] Passenger 6 entering the ticket queue
+[Time: 6] Passenger 14 finished exploring, entering the ticket booth
+[Time: 6] Passenger 14 entering the ticket queue
+[Time: 7] Passenger 2 finished exploring, entering the ticket booth
+[Time: 7] Passenger 2 entering the ticket queue
+[Time: 7] Passenger 7 finished exploring, entering the ticket booth
+[Time: 7] Passenger 7 entering the ticket queue
+[Time: 7] Passenger 17 finished exploring, entering the ticket booth
+[Time: 7] Passenger 19 finished exploring, entering the ticket booth
+[Time: 7] Passenger 21 finished exploring, entering the ticket booth
+[Time: 7] Passenger 27 acquired a ticket
+[Time: 7] Passenger 27 has entered the ride queue
+[Time: 7] Passenger 27 is boarding
 [Time: 7] Car 0 has returned from the ride
+[Time: 7] Passenger 17 entering the ticket queue
+[Time: 7] Passenger 19 entering the ticket queue
+[Time: 7] Passenger 21 entering the ticket queue
 [Time: 7] Car 0 has invoked unload()
-[Time: 7] Passenger 7 unboarded
-[Time: 7] Passenger 7 is exploring the park
-[Time: 7] Passenger 19 unboarded
-[Time: 7] Passenger 19 is exploring the park
-[Time: 7] Passenger 14 unboarded
-[Time: 7] Passenger 14 is exploring the park
-[Time: 8] Passenger 2 finished exploring, entering the ticket booth
-[Time: 8] Passenger 13 finished exploring, entering the ticket booth
-[Time: 8] Passenger 26 finished exploring, entering the ticket booth
-[Time: 8] Passenger 27 finished exploring, entering the ticket booth
-[Time: 9] Passenger 11 acquired a ticket
-[Time: 9] Passenger 11 has entered the ride queue
-[Time: 9] Passenger 11 is boarding
+[Time: 7] Passenger 13 unboarded
+[Time: 7] Passenger 13 is exploring the park
+[Time: 7] Passenger 18 unboarded
+[Time: 7] Passenger 18 is exploring the park
+[Time: 8] Passenger 3 finished exploring, entering the ticket booth
+[Time: 8] Passenger 3 entering the ticket queue
+[Time: 8] Passenger 12 finished exploring, entering the ticket booth
+[Time: 8] Passenger 12 entering the ticket queue
+[Time: 8] Passenger 24 finished exploring, entering the ticket booth
+[Time: 8] Passenger 24 entering the ticket queue
+[Time: 8] Passenger 1 finished exploring, entering the ticket booth
+[Time: 8] Passenger 1 entering the ticket queue
+[Time: 9] Passenger 23 finished exploring, entering the ticket booth
 [Time: 9] Passenger 23 entering the ticket queue
+[Time: 9] Passenger 10 acquired a ticket
+[Time: 9] Passenger 10 has entered the ride queue
+[Time: 9] Passenger 10 is boarding
 [Time: 9] Car 1 is full with 2 passengers
 [Time: 9] Car 1 has departed to ride
 [Time: 9] Car 2 invoked load()
-[Time: 9] Passenger 24 finished exploring, entering the ticket booth
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 23]
+Ticket Queue: [Passenger 22, Passenger 8, Passenger 11, Passenger 20, Passenger 26, Passenger 28, Passenger 0, Passenger 5, Passenger 16, Passenger 29, Passenger 4, Passenger 6, Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: RIDING (2/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (6 exploring, 1 in queues, 0 waiting in car, 3 riding)
+Passengers in the park: 30 (5 exploring, 23 in queues, 0 waiting in car, 2 riding)
 
-[Time: 10] Passenger 10 finished exploring, entering the ticket booth
-[Time: 10] Passenger 16 finished exploring, entering the ticket booth
-[Time: 10] Passenger 28 finished exploring, entering the ticket booth
-[Time: 10] Passenger 19 finished exploring, entering the ticket booth
-[Time: 10] Passenger 14 finished exploring, entering the ticket booth
-[Time: 11] Passenger 23 acquired a ticket
-[Time: 11] Passenger 23 has entered the ride queue
-[Time: 11] Passenger 23 is boarding
+[Time: 10] Passenger 9 finished exploring, entering the ticket booth
+[Time: 10] Passenger 9 entering the ticket queue
+[Time: 10] Passenger 15 finished exploring, entering the ticket booth
+[Time: 10] Passenger 15 entering the ticket queue
+[Time: 10] Passenger 25 finished exploring, entering the ticket booth
+[Time: 10] Passenger 25 entering the ticket queue
+[Time: 10] Passenger 18 finished exploring, entering the ticket booth
+[Time: 10] Passenger 18 entering the ticket queue
+[Time: 11] Passenger 22 acquired a ticket
+[Time: 11] Passenger 22 has entered the ride queue
 [Time: 11] Car 1 has returned from the ride
-[Time: 11] Passenger 9 entering the ticket queue
+[Time: 11] Passenger 22 is boarding
 [Time: 11] Car 1 has invoked unload()
-[Time: 11] Passenger 11 unboarded
-[Time: 11] Passenger 11 is exploring the park
-[Time: 13] Passenger 9 acquired a ticket
-[Time: 13] Passenger 9 has entered the ride queue
-[Time: 13] Passenger 9 is boarding
-[Time: 13] Passenger 12 entering the ticket queue
+[Time: 11] Passenger 10 unboarded
+[Time: 11] Passenger 10 is exploring the park
+[Time: 11] Passenger 27 unboarded
+[Time: 11] Passenger 27 is exploring the park
+[Time: 13] Passenger 8 acquired a ticket
+[Time: 13] Passenger 8 has entered the ride queue
+[Time: 13] Passenger 8 is boarding
 [Time: 13] Car 2 is full with 2 passengers
 [Time: 13] Car 2 has departed to ride
 [Time: 13] Car 3 invoked load()
+[Time: 14] Passenger 10 finished exploring, entering the ticket booth
+[Time: 14] Passenger 10 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 12]
+Ticket Queue: [Passenger 11, Passenger 20, Passenger 26, Passenger 28, Passenger 0, Passenger 5, Passenger 16, Passenger 29, Passenger 4, Passenger 6, Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: RIDING (2/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (2 exploring, 1 in queues, 0 waiting in car, 4 riding)
+Passengers in the park: 30 (2 exploring, 26 in queues, 0 waiting in car, 2 riding)
 
-[Time: 15] Passenger 12 acquired a ticket
-[Time: 15] Passenger 12 has entered the ride queue
-[Time: 15] Passenger 12 is boarding
-[Time: 15] Passenger 21 entering the ticket queue
+[Time: 15] Passenger 11 acquired a ticket
+[Time: 15] Passenger 11 has entered the ride queue
+[Time: 15] Passenger 11 is boarding
 [Time: 15] Car 2 has returned from the ride
 [Time: 15] Car 2 has invoked unload()
-[Time: 15] Passenger 23 unboarded
-[Time: 15] Passenger 23 is exploring the park
-[Time: 15] Passenger 12 unboarded
-[Time: 15] Passenger 12 is exploring the park
-[Time: 15] Passenger 9 unboarded
-[Time: 15] Passenger 9 is exploring the park
-[Time: 17] Passenger 21 acquired a ticket
-[Time: 17] Passenger 21 has entered the ride queue
-[Time: 17] Passenger 21 is boarding
-[Time: 17] Passenger 29 entering the ticket queue
+[Time: 15] Passenger 8 unboarded
+[Time: 15] Passenger 8 is exploring the park
+[Time: 15] Passenger 22 unboarded
+[Time: 15] Passenger 22 is exploring the park
+[Time: 17] Passenger 13 finished exploring, entering the ticket booth
+[Time: 17] Passenger 13 entering the ticket queue
+[Time: 17] Passenger 20 acquired a ticket
+[Time: 17] Passenger 20 has entered the ride queue
+[Time: 17] Passenger 20 is boarding
 [Time: 17] Car 3 is full with 2 passengers
 [Time: 17] Car 3 has departed to ride
 [Time: 17] Car 0 invoked load()
-[Time: 17] Passenger 7 finished exploring, entering the ticket booth
-[Time: 19] Passenger 29 acquired a ticket
-[Time: 19] Passenger 29 has entered the ride queue
-[Time: 19] Passenger 29 is boarding
-[Time: 19] Passenger 15 entering the ticket queue
-[Time: 19] Passenger 9 finished exploring, entering the ticket booth
+[Time: 19] Passenger 26 acquired a ticket
+[Time: 19] Passenger 26 has entered the ride queue
 [Time: 19] Car 3 has returned from the ride
+[Time: 19] Passenger 26 is boarding
 [Time: 19] Car 3 has invoked unload()
-[Time: 19] Passenger 29 unboarded
-[Time: 19] Passenger 29 is exploring the park
-[Time: 19] Passenger 21 unboarded
-[Time: 19] Passenger 21 is exploring the park
+[Time: 19] Passenger 20 unboarded
+[Time: 19] Passenger 20 is exploring the park
+[Time: 19] Passenger 11 unboarded
+[Time: 19] Passenger 11 is exploring the park
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 15]
+Ticket Queue: [Passenger 28, Passenger 0, Passenger 5, Passenger 16, Passenger 29, Passenger 4, Passenger 6, Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13]
 Ride Queue: []
 Car 0: WAITING (1/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
-Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (5 exploring, 1 in queues, 1 waiting in car, 4 riding)
+Car 3: UNLOADING (2/2 Passengers)
+Passengers in the park: 30 (5 exploring, 24 in queues, 1 waiting in car, 0 riding)
 
-[Time: 20] Passenger 11 finished exploring, entering the ticket booth
-[Time: 21] Passenger 15 acquired a ticket
-[Time: 21] Passenger 15 has entered the ride queue
-[Time: 21] Passenger 15 is boarding
-[Time: 21] Passenger 0 entering the ticket queue
+[Time: 20] Passenger 27 finished exploring, entering the ticket booth
+[Time: 20] Passenger 27 entering the ticket queue
+[Time: 21] Passenger 28 acquired a ticket
+[Time: 21] Passenger 28 has entered the ride queue
+[Time: 21] Passenger 28 is boarding
 [Time: 21] Car 0 is full with 2 passengers
 [Time: 21] Car 0 has departed to ride
 [Time: 21] Car 1 invoked load()
-[Time: 21] Passenger 21 finished exploring, entering the ticket booth
+[Time: 23] Car 0 has returned from the ride
 [Time: 23] Passenger 0 acquired a ticket
 [Time: 23] Passenger 0 has entered the ride queue
 [Time: 23] Passenger 0 is boarding
-[Time: 23] Car 0 has returned from the ride
-[Time: 23] Passenger 5 entering the ticket queue
 [Time: 23] Car 0 has invoked unload()
-[Time: 23] Passenger 15 unboarded
-[Time: 23] Passenger 15 is exploring the park
-[Time: 23] Passenger 12 finished exploring, entering the ticket booth
-[Time: 23] Passenger 0 unboarded
-[Time: 23] Passenger 0 is exploring the park
+[Time: 23] Passenger 26 unboarded
+[Time: 23] Passenger 26 is exploring the park
+[Time: 23] Passenger 28 unboarded
+[Time: 23] Passenger 28 is exploring the park
+[Time: 23] Passenger 22 finished exploring, entering the ticket booth
+[Time: 23] Passenger 22 entering the ticket queue
+[Time: 23] Passenger 20 finished exploring, entering the ticket booth
+[Time: 23] Passenger 20 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 5]
+Ticket Queue: [Passenger 5, Passenger 16, Passenger 29, Passenger 4, Passenger 6, Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (1/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (4 exploring, 1 in queues, 1 waiting in car, 5 riding)
+Passengers in the park: 30 (4 exploring, 25 in queues, 1 waiting in car, 0 riding)
 
+[Time: 25] Passenger 8 finished exploring, entering the ticket booth
+[Time: 25] Passenger 8 entering the ticket queue
 [Time: 25] Passenger 5 acquired a ticket
 [Time: 25] Passenger 5 has entered the ride queue
 [Time: 25] Passenger 5 is boarding
-[Time: 25] Passenger 17 entering the ticket queue
 [Time: 25] Car 1 is full with 2 passengers
 [Time: 25] Car 1 has departed to ride
 [Time: 25] Car 2 invoked load()
-[Time: 25] Passenger 23 finished exploring, entering the ticket booth
-[Time: 26] Passenger 29 finished exploring, entering the ticket booth
-[Time: 26] Passenger 15 finished exploring, entering the ticket booth
-[Time: 27] Passenger 17 acquired a ticket
-[Time: 27] Passenger 17 has entered the ride queue
-[Time: 27] Passenger 17 is boarding
+[Time: 25] Passenger 26 finished exploring, entering the ticket booth
+[Time: 25] Passenger 26 entering the ticket queue
+[Time: 26] Passenger 11 finished exploring, entering the ticket booth
+[Time: 26] Passenger 11 entering the ticket queue
+[Time: 26] Passenger 28 finished exploring, entering the ticket booth
+[Time: 26] Passenger 28 entering the ticket queue
+[Time: 27] Passenger 16 acquired a ticket
+[Time: 27] Passenger 16 has entered the ride queue
+[Time: 27] Passenger 16 is boarding
 [Time: 27] Car 1 has returned from the ride
-[Time: 27] Passenger 25 entering the ticket queue
 [Time: 27] Car 1 has invoked unload()
+[Time: 27] Passenger 0 unboarded
+[Time: 27] Passenger 0 is exploring the park
 [Time: 27] Passenger 5 unboarded
 [Time: 27] Passenger 5 is exploring the park
-[Time: 27] Passenger 17 unboarded
-[Time: 27] Passenger 17 is exploring the park
-[Time: 29] Passenger 25 acquired a ticket
-[Time: 29] Passenger 25 has entered the ride queue
-[Time: 29] Passenger 25 is boarding
-[Time: 29] Passenger 4 entering the ticket queue
+[Time: 29] Passenger 29 acquired a ticket
+[Time: 29] Passenger 29 has entered the ride queue
+[Time: 29] Passenger 29 is boarding
 [Time: 29] Car 2 is full with 2 passengers
 [Time: 29] Car 2 has departed to ride
 [Time: 29] Car 3 invoked load()
-[Time: 29] Passenger 17 finished exploring, entering the ticket booth
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 4]
+Ticket Queue: [Passenger 4, Passenger 6, Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: RIDING (2/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (2 exploring, 1 in queues, 0 waiting in car, 8 riding)
+Passengers in the park: 30 (2 exploring, 26 in queues, 0 waiting in car, 2 riding)
 
 [Time: 31] Passenger 4 acquired a ticket
 [Time: 31] Passenger 4 has entered the ride queue
 [Time: 31] Passenger 4 is boarding
-[Time: 31] Passenger 6 entering the ticket queue
 [Time: 31] Car 2 has returned from the ride
 [Time: 31] Car 2 has invoked unload()
+[Time: 31] Passenger 29 unboarded
+[Time: 31] Passenger 29 is exploring the park
+[Time: 31] Passenger 16 unboarded
+[Time: 31] Passenger 16 is exploring the park
 [Time: 31] Passenger 5 finished exploring, entering the ticket booth
-[Time: 31] Passenger 4 unboarded
-[Time: 31] Passenger 4 is exploring the park
-[Time: 31] Passenger 25 unboarded
-[Time: 31] Passenger 25 is exploring the park
+[Time: 31] Passenger 5 entering the ticket queue
 [Time: 33] Passenger 6 acquired a ticket
 [Time: 33] Passenger 6 has entered the ride queue
 [Time: 33] Passenger 6 is boarding
-[Time: 33] Passenger 3 entering the ticket queue
+[Time: 33] Passenger 29 finished exploring, entering the ticket booth
 [Time: 33] Car 3 is full with 2 passengers
 [Time: 33] Car 3 has departed to ride
+[Time: 33] Passenger 29 entering the ticket queue
 [Time: 33] Car 0 invoked load()
-[Time: 33] Passenger 0 finished exploring, entering the ticket booth
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 3]
+Ticket Queue: [Passenger 14, Passenger 2, Passenger 7, Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28, Passenger 5, Passenger 29]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
-Car 2: WAITING (0/2 Passengers)
+Car 2: UNLOADING (2/2 Passengers)
 Car 3: RIDING (2/2 Passengers)
-Passengers in the park: 30 (2 exploring, 1 in queues, 0 waiting in car, 9 riding)
+Passengers in the park: 30 (2 exploring, 26 in queues, 0 waiting in car, 2 riding)
 
-[Time: 35] Passenger 3 acquired a ticket
-[Time: 35] Passenger 3 has entered the ride queue
-[Time: 35] Passenger 3 is boarding
+[Time: 35] Passenger 14 acquired a ticket
+[Time: 35] Passenger 14 has entered the ride queue
+[Time: 35] Passenger 14 is boarding
 [Time: 35] Car 3 has returned from the ride
-[Time: 35] Passenger 1 entering the ticket queue
 [Time: 35] Car 3 has invoked unload()
 [Time: 35] Passenger 6 unboarded
 [Time: 35] Passenger 6 is exploring the park
-[Time: 36] Passenger 25 finished exploring, entering the ticket booth
-[Time: 37] Passenger 1 acquired a ticket
-[Time: 37] Passenger 1 has entered the ride queue
-[Time: 37] Passenger 1 is boarding
-[Time: 37] Passenger 8 entering the ticket queue
+[Time: 35] Passenger 4 unboarded
+[Time: 35] Passenger 4 is exploring the park
+[Time: 37] Passenger 2 acquired a ticket
+[Time: 37] Passenger 2 has entered the ride queue
+[Time: 37] Passenger 2 is boarding
 [Time: 37] Car 0 is full with 2 passengers
 [Time: 37] Car 0 has departed to ride
 [Time: 37] Car 1 invoked load()
-[Time: 39] Passenger 8 acquired a ticket
-[Time: 39] Passenger 8 has entered the ride queue
-[Time: 39] Passenger 8 is boarding
+[Time: 37] Passenger 0 finished exploring, entering the ticket booth
+[Time: 37] Passenger 0 entering the ticket queue
+[Time: 39] Passenger 7 acquired a ticket
+[Time: 39] Passenger 7 has entered the ride queue
+[Time: 39] Passenger 7 is boarding
 [Time: 39] Car 0 has returned from the ride
-[Time: 39] Passenger 18 entering the ticket queue
 [Time: 39] Car 0 has invoked unload()
-[Time: 39] Passenger 8 unboarded
-[Time: 39] Passenger 8 is exploring the park
+[Time: 39] Passenger 14 unboarded
+[Time: 39] Passenger 14 is exploring the park
+[Time: 39] Passenger 2 unboarded
+[Time: 39] Passenger 2 is exploring the park
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 18]
+Ticket Queue: [Passenger 17, Passenger 19, Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28, Passenger 5, Passenger 29, Passenger 0]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (1/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (3 exploring, 1 in queues, 1 waiting in car, 9 riding)
+Passengers in the park: 30 (5 exploring, 24 in queues, 1 waiting in car, 0 riding)
 
-[Time: 41] Passenger 18 acquired a ticket
-[Time: 41] Passenger 18 has entered the ride queue
-[Time: 41] Passenger 18 is boarding
-[Time: 41] Passenger 20 entering the ticket queue
+[Time: 40] Passenger 6 finished exploring, entering the ticket booth
+[Time: 40] Passenger 6 entering the ticket queue
+[Time: 41] Passenger 17 acquired a ticket
+[Time: 41] Passenger 17 has entered the ride queue
+[Time: 41] Passenger 17 is boarding
 [Time: 41] Car 1 is full with 2 passengers
 [Time: 41] Car 1 has departed to ride
 [Time: 41] Car 2 invoked load()
-[Time: 41] Passenger 4 finished exploring, entering the ticket booth
-[Time: 43] Passenger 20 acquired a ticket
-[Time: 43] Passenger 20 has entered the ride queue
-[Time: 43] Passenger 20 is boarding
-[Time: 43] Passenger 22 entering the ticket queue
+[Time: 41] Passenger 16 finished exploring, entering the ticket booth
+[Time: 41] Passenger 16 entering the ticket queue
+[Time: 43] Passenger 19 acquired a ticket
+[Time: 43] Passenger 19 has entered the ride queue
+[Time: 43] Passenger 19 is boarding
 [Time: 43] Car 1 has returned from the ride
 [Time: 43] Car 1 has invoked unload()
-[Time: 43] Passenger 3 unboarded
-[Time: 43] Passenger 3 is exploring the park
-[Time: 43] Passenger 6 finished exploring, entering the ticket booth
+[Time: 43] Passenger 7 unboarded
+[Time: 43] Passenger 7 is exploring the park
+[Time: 43] Passenger 17 unboarded
+[Time: 43] Passenger 17 is exploring the park
+[Time: 43] Passenger 4 finished exploring, entering the ticket booth
+[Time: 43] Passenger 4 entering the ticket queue
+[Time: 44] Passenger 2 finished exploring, entering the ticket booth
+[Time: 44] Passenger 2 entering the ticket queue
+[Time: 44] Passenger 17 finished exploring, entering the ticket booth
+[Time: 44] Passenger 17 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 22]
+Ticket Queue: [Passenger 21, Passenger 3, Passenger 12, Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28, Passenger 5, Passenger 29, Passenger 0, Passenger 6, Passenger 16, Passenger 4, Passenger 2, Passenger 17]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
-Car 1: WAITING (0/2 Passengers)
+Car 1: UNLOADING (2/2 Passengers)
 Car 2: WAITING (1/2 Passengers)
 Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (2 exploring, 1 in queues, 1 waiting in car, 10 riding)
+Passengers in the park: 30 (2 exploring, 27 in queues, 1 waiting in car, 0 riding)
 
-[Time: 45] Passenger 22 acquired a ticket
-[Time: 45] Passenger 22 has entered the ride queue
-[Time: 45] Passenger 22 is boarding
-[Time: 45] Passenger 2 entering the ticket queue
+[Time: 45] Passenger 21 acquired a ticket
+[Time: 45] Passenger 21 has entered the ride queue
+[Time: 45] Passenger 21 is boarding
 [Time: 45] Car 2 is full with 2 passengers
 [Time: 45] Car 2 has departed to ride
 [Time: 45] Car 3 invoked load()
-[Time: 47] Passenger 2 acquired a ticket
-[Time: 47] Passenger 2 has entered the ride queue
-[Time: 47] Passenger 2 is boarding
+[Time: 47] Passenger 3 acquired a ticket
+[Time: 47] Passenger 3 has entered the ride queue
+[Time: 47] Passenger 3 is boarding
 [Time: 47] Car 2 has returned from the ride
-[Time: 47] Passenger 13 entering the ticket queue
 [Time: 47] Car 2 has invoked unload()
-[Time: 47] Passenger 1 unboarded
-[Time: 47] Passenger 1 is exploring the park
-[Time: 48] Passenger 3 finished exploring, entering the ticket booth
-[Time: 48] Passenger 8 finished exploring, entering the ticket booth
-[Time: 49] Passenger 13 acquired a ticket
-[Time: 49] Passenger 13 has entered the ride queue
-[Time: 49] Passenger 13 is boarding
-[Time: 49] Passenger 26 entering the ticket queue
+[Time: 47] Passenger 19 unboarded
+[Time: 47] Passenger 19 is exploring the park
+[Time: 47] Passenger 21 unboarded
+[Time: 47] Passenger 21 is exploring the park
+[Time: 48] Passenger 14 finished exploring, entering the ticket booth
+[Time: 48] Passenger 14 entering the ticket queue
+[Time: 49] Passenger 12 acquired a ticket
+[Time: 49] Passenger 12 has entered the ride queue
+[Time: 49] Passenger 12 is boarding
 [Time: 49] Car 3 is full with 2 passengers
 [Time: 49] Car 3 has departed to ride
 [Time: 49] Car 0 invoked load()
+[Time: 49] Passenger 7 finished exploring, entering the ticket booth
+[Time: 49] Passenger 7 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 26]
+Ticket Queue: [Passenger 24, Passenger 1, Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28, Passenger 5, Passenger 29, Passenger 0, Passenger 6, Passenger 16, Passenger 4, Passenger 2, Passenger 17, Passenger 14, Passenger 7]
 Ride Queue: []
 Car 0: WAITING (0/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
 Car 3: RIDING (2/2 Passengers)
-Passengers in the park: 30 (1 exploring, 1 in queues, 0 waiting in car, 13 riding)
+Passengers in the park: 30 (2 exploring, 26 in queues, 0 waiting in car, 2 riding)
 
-[Time: 51] Passenger 26 acquired a ticket
-[Time: 51] Passenger 26 has entered the ride queue
-[Time: 51] Passenger 26 is boarding
-[Time: 51] Passenger 27 entering the ticket queue
 [Time: 51] Car 3 has returned from the ride
+[Time: 51] Passenger 24 acquired a ticket
+[Time: 51] Passenger 24 has entered the ride queue
+[Time: 51] Passenger 24 is boarding
 [Time: 51] Car 3 has invoked unload()
-[Time: 51] Passenger 20 unboarded
-[Time: 51] Passenger 20 is exploring the park
-[Time: 52] Passenger 20 finished exploring, entering the ticket booth
-[Time: 53] Passenger 27 acquired a ticket
-[Time: 53] Passenger 27 has entered the ride queue
-[Time: 53] Passenger 27 is boarding
-[Time: 53] Passenger 24 entering the ticket queue
+[Time: 51] Passenger 12 unboarded
+[Time: 51] Passenger 12 is exploring the park
+[Time: 51] Passenger 3 unboarded
+[Time: 51] Passenger 3 is exploring the park
+[Time: 51] Passenger 19 finished exploring, entering the ticket booth
+[Time: 51] Passenger 19 entering the ticket queue
+[Time: 52] Passenger 3 finished exploring, entering the ticket booth
+[Time: 52] Passenger 3 entering the ticket queue
+[Time: 53] Passenger 1 acquired a ticket
+[Time: 53] Passenger 1 has entered the ride queue
+[Time: 53] Passenger 1 is boarding
 [Time: 53] Car 0 is full with 2 passengers
 [Time: 53] Car 0 has departed to ride
 [Time: 53] Car 1 invoked load()
-[Time: 53] Passenger 1 finished exploring, entering the ticket booth
+[Time: 53] Passenger 12 finished exploring, entering the ticket booth
+[Time: 53] Passenger 12 entering the ticket queue
+[Time: 54] Passenger 21 finished exploring, entering the ticket booth
+[Time: 54] Passenger 21 entering the ticket queue
 
 [Monitor] SYSTEM STATE =>
-Ticket Queue: [Passenger 24]
+Ticket Queue: [Passenger 23, Passenger 9, Passenger 15, Passenger 25, Passenger 18, Passenger 10, Passenger 13, Passenger 27, Passenger 22, Passenger 20, Passenger 8, Passenger 26, Passenger 11, Passenger 28, Passenger 5, Passenger 29, Passenger 0, Passenger 6, Passenger 16, Passenger 4, Passenger 2, Passenger 17, Passenger 14, Passenger 7, Passenger 19, Passenger 3, Passenger 12, Passenger 21]
 Ride Queue: []
 Car 0: RIDING (2/2 Passengers)
 Car 1: WAITING (0/2 Passengers)
 Car 2: WAITING (0/2 Passengers)
-Car 3: WAITING (0/2 Passengers)
-Passengers in the park: 30 (0 exploring, 1 in queues, 0 waiting in car, 14 riding)
+Car 3: UNLOADING (2/2 Passengers)
+Passengers in the park: 30 (0 exploring, 28 in queues, 0 waiting in car, 2 riding)
 
-[Time: 55] Passenger 24 acquired a ticket
-[Time: 55] Passenger 24 has entered the ride queue
+[Time: 55] Passenger 23 acquired a ticket
+[Time: 55] Passenger 23 has entered the ride queue
+[Time: 55] Passenger 23 is boarding
 [Time: 55] Car 0 has returned from the ride
-[Time: 55] Passenger 24 is boarding
 [Time: 55] Car 0 has invoked unload()
-[Time: 55] Passenger 18 unboarded
-[Time: 55] Passenger 18 is exploring the park
-[Time: 55] Passenger 10 entering the ticket queue
-[Time: 57] Passenger 10 acquired a ticket
-[Time: 57] Passenger 10 has entered the ride queue
-[Time: 57] Passenger 10 is boarding
-[Time: 57] Passenger 16 entering the ticket queue
+[Time: 55] Passenger 1 unboarded
+[Time: 55] Passenger 1 is exploring the park
+[Time: 55] Passenger 24 unboarded
+[Time: 55] Passenger 24 is exploring the park
+[Time: 57] Passenger 9 acquired a ticket
+[Time: 57] Passenger 9 has entered the ride queue
+[Time: 57] Passenger 9 is boarding
 [Time: 57] Car 1 is full with 2 passengers
 [Time: 57] Car 1 has departed to ride
 [Time: 57] Car 2 invoked load()
-[Time: 59] Passenger 18 finished exploring, entering the ticket booth
-[Time: 59] Passenger 16 acquired a ticket
-[Time: 59] Passenger 16 has entered the ride queue
-[Time: 59] Passenger 16 is boarding
-[Time: 59] Passenger 28 entering the ticket queue
+[Time: 59] Passenger 24 finished exploring, entering the ticket booth
+[Time: 59] Passenger 15 acquired a ticket
+[Time: 59] Passenger 15 has entered the ride queue
+[Time: 59] Passenger 15 is boarding
+[Time: 59] Passenger 24 entering the ticket queue
 [Time: 59] Car 1 has returned from the ride
 [Time: 59] Car 1 has invoked unload()
-[Time: 59] Passenger 24 unboarded
-[Time: 59] Passenger 24 is exploring the park
+[Time: 59] Passenger 9 unboarded
+[Time: 59] Passenger 9 is exploring the park
+[Time: 59] Passenger 23 unboarded
+[Time: 59] Passenger 23 is exploring the park
 
 ========== PARK CLOSED ==========
 
 [Monitor] FINAL STATISTICS:
 Total Simulation Time:        [Time: 60]
-Total Passengers Served:      22
+Total Passengers Served:      28
 Total Rides:                  14
-Average Ticket Queue Seconds: 2.6
+Average Ticket Queue Seconds: 26.7
 Average Ride Queue Seconds:   0.0
-Average Car Utilization:      78.6 Percent (1.6/2 Passengers Per Ride)
+Average Car Utilization:      100.0 Percent (2.0/2 Passengers Per Ride)

@@ -53,9 +53,11 @@ extern int ride_queue_len;
 extern int exploring;
 extern int waiting_in_car;
 extern int riding;
+extern int loading_car_id;
+extern int unloading_car_id;
  
 // Car state 
-extern int car_passengers;             // passengers currently loaded in car      
+extern int *car_passengers;            // array indexed by car id     
 extern time_t last_board_time;         // wall-clock time last passenger boarded  
 
 // part3: CarState enum to track active status 
@@ -86,6 +88,7 @@ extern double total_ride_queue_secs;   // sum of each passenger's time waiting t
 extern time_t *ticket_enter_time;      // when passenger entered ticket queue
 extern time_t *ride_enter_time;        // when passenger entered ride queue
 
+
 extern pthread_cond_t load_cond;       // car signals passengers to board      
 extern pthread_cond_t unload_cond;     // car signals passengers to unboard    
 extern pthread_cond_t car_ready_cond;  // passenger signals car a rider joined 
@@ -94,8 +97,9 @@ extern sem_t loading_bay;              // only 1 car may be in load() at once
  
 // Car lifecycle flags 
 extern int loading_open;               // 1 = car is accepting boarders           
-extern int unloading_open;             // 1 = car has signaled unload             
-extern int passengers_unboarded;       // number of passengers that have unboarded 
+extern int *unloading_open;            // 1 = car has signaled unload             
+extern int *passengers_unboarded;      // number of passengers that have unboarded 
+extern int *passenger_car;             // which car id each passenger is riding
  
 // Global simulation parameters
 extern SimParams sim;
