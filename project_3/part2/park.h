@@ -8,8 +8,8 @@
 
 /*
     Part 2: part2 header file:
-    Header file for part 2 linking the helper functions to the main park.c 
-    program for part2. 
+        Header file for part 2 linking the helper functions from helpers.c 
+        to the main park.c program for part2. 
 */
 
 #ifndef PARK_H
@@ -23,19 +23,19 @@
 #include <semaphore.h>
 #include <time.h>
  
-/* ─── Simulation Parameters ─────────────────────────────────────────── */
+/* --- Simulation Parameters ------------------------------------------------ */
 
 typedef struct {
-    int N;  // number of passenger threads 
-    int C;  // number of car threads       
-    int P;  // capacity per car            
-    int W;  // car waiting period (seconds)
-    int R;  // car ride duration (seconds) 
-    int T;  // park open duration (seconds)
-    int J;  // ride queue max size         
+    int N;          // number of passenger threads 
+    int C;          // number of car threads       
+    int P;          // capacity per car            
+    int W;          // car waiting period (seconds)
+    int R;          // car ride duration (seconds) 
+    int T;          // park open duration (seconds)
+    int J;          // ride queue max size         
 } SimParams;
  
-/* ─── Shared State ──────────────────────────────────────────────────── */
+/* --- Shared State --------------------------------------------------------- */
  
 // Timing 
 extern time_t park_start;               
@@ -71,7 +71,7 @@ extern int passengers_unboarded;       // number of passengers that have unboard
 // Global simulation parameters
 extern SimParams sim;
  
-/* ─── Thread Argument Types ──────────────────────────────────────────── */
+/* --- Thread Argument Types ------------------------------------------------- */
 
 // Passenger type
 typedef struct {
@@ -83,7 +83,7 @@ typedef struct {
     int id;
 } CarArg;
  
-/* ─── Helper Function Declarations ──────────────────────────────────── */
+/* --- Helper Function Declarations ------------------------------------------ */
 
 // Utility Functions
 int  get_elapsed(void);
