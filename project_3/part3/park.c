@@ -1,25 +1,29 @@
 /*
-* Description: Project 3 [ part2 / park.c ] for Duck Park v2.0
+* Description: Project 3 [ part3 / park.c ] for Duck Park v3.0
 *
 * Author: Lucas Bixby
 *
-* Date: 06/01/2026 ( last modified )
+* Date: 06/02/2026 ( last modified )
 */
 
 /*
-    Part 2: Multi-Threaded Solution:
-    Test your implementation with multiple passenger threads entering and exiting from multiple car
-    threads at varying times to ensure correct synchronization. You should choose to use any
-    combination of mutex lock, semaphore, and conditional variable in the Pthread library to
-    implement. Terminal output should reflect the state of the system include actions make or status
-    changes for each thread.
+    Part 3: IPC Monitoring 
+        • IPC Implementation (8 points)
+            o Pipe/mmap creation (2 points): Successfully creates communication channel
+            o Data transmission (3 points): Queue states transmitted between processes/threads
+            o Resource management (3 points): Proper cleanup of file descriptors/memory
+        • Queue State Display (12 points)
+            o Real-time updates (4 points): Queue contents update as passengers move through system
+            o Accurate representation (4 points): Displayed queue matches actual system state
+            o Formatted output (2 points): Queue contents clearly formatted with timestamps
+            o Both queues shown (2 points): Both ticket queue and boarding queue displayed
 */
 
 
 #include "park.h"
 #include <stdarg.h>
  
-/* ─── Global Definitions ─────────────────────────────────────────────── */
+/* --- Global Definitions -------------------------------------------------- */
 SimParams sim;
  
 time_t park_start;
@@ -28,33 +32,44 @@ volatile int park_open = 1;
 int ticket_queue_len = 0;
 int ride_queue_len = 0;
 int car_passengers = 0;
+time_t last_board_time = 0;
+
+// part3: passenger trackers 
 int exploring = 0; 
 int waiting_in_car = 0;
 int riding = 0; 
-time_t last_board_time = 0;
+// part3: final stat trackers 
+int total_passengers_served = 0;
+int total_rides = 0;
+double total_ticket_queue_secs = 0.0;
+double total_ride_queue_secs = 0.0;
  
 pthread_mutex_t ticket_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t ticket_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t ride_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t load_cond = PTHREAD_COND_INITIALIZER;
 pthread_cond_t unload_cond = PTHREAD_COND_INITIALIZER;
 pthread_cond_t car_ready_cond = PTHREAD_COND_INITIALIZER;
 pthread_cond_t ride_q_cond = PTHREAD_COND_INITIALIZER;
 sem_t loading_bay;   
+
+// part3: ride and ticket queue mutex initializations 
+pthread_mutex_t ticket_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t ride_queue_mutex = PTHREAD_MUTEX_INITIALIZER;
  
 int loading_open = 0;
 int unloading_open = 0;
 int passengers_unboarded = 0;
 
+// part3: initialize global arrays for tracking status 
 CarState *car_states;
 int *car_load_counts;
-
 int *ticket_queue;
 int *ride_queue;
+time_t *ticket_enter_time;
+time_t *ride_enter_time;
  
-/* ─── Defaults ───────────────────────────────────────────────────────── */
+/* --- Defaults ------------------------------------------------------------ */
 #define DEFAULT_N 5 
 #define DEFAULT_C 2 
 #define DEFAULT_P 2
@@ -63,7 +78,7 @@ int *ride_queue;
 #define DEFAULT_T 30
 #define DEFAULT_J 3
  
-/* ─── Usage ──────────────────────────────────────────────────────────── */
+/* --- Usage --------------------------------------------------------------- */
 static void print_usage(const char *prog) 
 // details the usage of the program using the -h flag 
 {
@@ -84,7 +99,7 @@ static void print_usage(const char *prog)
     );
 }
  
-/* ─── Print simulation config ────────────────────────────────────────── */
+/* --- Print Simulation config --------------------------------------------- */
 static void print_config(void) 
 // prints the simulation configuration before executing
 {
@@ -97,7 +112,7 @@ static void print_config(void)
     printf("- Max ride queue size: %d\n\n",       sim.J);
 }
  
-/* ─── Main ───────────────────────────────────────────────────────────── */
+/* --- Main ---------------------------------------------------------------- */
 int main(int argc, char *argv[]) 
 // main execution of the simulation. Opens the park, launches threads, closes the park
 {
@@ -110,7 +125,7 @@ int main(int argc, char *argv[])
     sim.T = DEFAULT_T;
     sim.J = DEFAULT_J;
  
-    // Parse command-line flags with getopt 
+    // Parse command-line flags
     int opt;
     while ((opt = getopt(argc, argv, "n:c:p:w:r:t:j:h")) != -1) {
         switch (opt) {
@@ -155,13 +170,15 @@ int main(int argc, char *argv[])
     PassengerArg *p_args         = malloc(sim.N * sizeof(PassengerArg));
     CarArg *c_args               = malloc(sim.C * sizeof(CarArg));
 
+    // part3: Allocate memory for system status trackers 
     car_states                   = calloc(sim.C, sizeof(CarState));
     car_load_counts              = calloc(sim.C, sizeof(int));
+    ticket_queue                 = malloc(sim.N * sizeof(int));
+    ride_queue                   = malloc(sim.N * sizeof(int));
+    ticket_enter_time            = calloc(sim.N, sizeof(time_t));
+    ride_enter_time              = calloc(sim.N, sizeof(time_t));
 
-    ticket_queue            = malloc(sim.N * sizeof(int));
-    ride_queue              = malloc(sim.N * sizeof(int));
- 
-    if (!passenger_threads || !car_threads || !p_args || !c_args) {
+    if (!passenger_threads || !car_threads || !p_args || !c_args || !car_states || !car_load_counts || !ticket_queue || !ride_queue) {
         fprintf(stderr, "Error: failed to allocate thread memory.\n");
         return 1;
     }
@@ -184,8 +201,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Define and launch monitor thread
     pthread_t monitor;
-
     pthread_create(&monitor, NULL, monitor_thread, NULL);
  
     // Let the park run for T seconds, then close 
@@ -200,7 +217,7 @@ int main(int argc, char *argv[])
     pthread_cond_broadcast(&ride_q_cond);
     pthread_mutex_unlock(&ticket_mutex);   // in case a passenger holds it 
  
-    /* ────────── Join all threads ────────── */
+    /* ------------- Join all threads ------------- */
     for (int i = 0; i < sim.N; i++) {
         pthread_join(passenger_threads[i], NULL);
     }
@@ -213,8 +230,11 @@ int main(int argc, char *argv[])
     pthread_mutex_destroy(&ticket_mutex);
     pthread_mutex_destroy(&state_mutex);
     pthread_mutex_destroy(&print_mutex);
+
+    // part3: destroy ticket and ride queue mutex
     pthread_mutex_destroy(&ticket_queue_mutex);
     pthread_mutex_destroy(&ride_queue_mutex);
+
     pthread_cond_destroy(&load_cond);
     pthread_cond_destroy(&unload_cond);
     pthread_cond_destroy(&car_ready_cond);
@@ -225,6 +245,10 @@ int main(int argc, char *argv[])
     free(car_threads);
     free(p_args);
     free(c_args);
+
+    // part3: free system status tracking memory 
+    free(ticket_enter_time);
+    free(ride_enter_time);
     free(car_states);
     free(car_load_counts); 
     free(ticket_queue);

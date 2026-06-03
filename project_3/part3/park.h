@@ -1,15 +1,15 @@
 /*
-* Description: Project 3 [ part2 / park.h ] for Duck Park v2.0
+* Description: Project 3 [ part3 / park.h ] for Duck Park v3.0
 *
 * Author: Lucas Bixby
 *
-* Date: 06/01/2026 ( last modified )
+* Date: 06/02/2026 ( last modified )
 */
 
 /*
-    Part 2: part2 header file:
-    Header file for part 2 linking the helper functions to the main park.c 
-    program for part2. 
+    Part 3: part3 header file:
+        Header file for part 3 linking the helper functions in helpers.c 
+        to the main park.c program for part3. 
 */
 
 #ifndef PARK_H
@@ -23,19 +23,19 @@
 #include <semaphore.h>
 #include <time.h>
  
-/* ─── Simulation Parameters ─────────────────────────────────────────── */
+/* --- Simulation Parameters ------------------------------------------------ */
 
 typedef struct {
-    int N;  // number of passenger threads 
-    int C;  // number of car threads       
-    int P;  // capacity per car            
-    int W;  // car waiting period (seconds)
-    int R;  // car ride duration (seconds) 
-    int T;  // park open duration (seconds)
-    int J;  // ride queue max size         
+    int N;          // number of passenger threads 
+    int C;          // number of car threads       
+    int P;          // capacity per car            
+    int W;          // car waiting period (seconds)
+    int R;          // car ride duration (seconds) 
+    int T;          // park open duration (seconds)
+    int J;          // ride queue max size         
 } SimParams;
  
-/* ─── Shared State ──────────────────────────────────────────────────── */
+/* --- Shared State --------------------------------------------------------- */
  
 // Timing 
 extern time_t park_start;               
@@ -49,7 +49,7 @@ extern int ticket_queue_len;
 // Ride queue length ( how many passengers are waiting to board ) 
 extern int ride_queue_len;
 
-// Passenger activity counters ( protected by state_mutex )
+// part3: passenger activity counters ( protected by state_mutex )
 extern int exploring;
 extern int waiting_in_car;
 extern int riding;
@@ -58,7 +58,7 @@ extern int riding;
 extern int car_passengers;             // passengers currently loaded in car      
 extern time_t last_board_time;         // wall-clock time last passenger boarded  
 
-// Car state enum
+// part3: CarState enum to track active status 
 typedef enum {
     CAR_WAITING,
     CAR_LOADING,
@@ -66,6 +66,7 @@ typedef enum {
     CAR_UNLOADING
 } CarState;
 
+// define arrays for the car status 
 extern CarState *car_states;
 extern int *car_load_counts;
  
@@ -73,8 +74,18 @@ extern int *car_load_counts;
 extern pthread_mutex_t ticket_mutex;   // serializes ticket booth              
 extern pthread_mutex_t state_mutex;    // protects all shared state      
 extern pthread_mutex_t print_mutex;    // serializes stdout writes      
+
+// part3: definitions for the ticket and ride queue mutex
 extern pthread_mutex_t ticket_queue_mutex;
 extern pthread_mutex_t ride_queue_mutex;      
+// part3: final statistics accumulators 
+extern int total_passengers_served;    // incremented each time a passenger unboards
+extern int total_rides;                // incremented each time a car departs
+extern double total_ticket_queue_secs; // sum of each passenger's time waiting for ticket
+extern double total_ride_queue_secs;   // sum of each passenger's time waiting to board
+extern time_t *ticket_enter_time;      // when passenger entered ticket queue
+extern time_t *ride_enter_time;        // when passenger entered ride queue
+
 extern pthread_cond_t load_cond;       // car signals passengers to board      
 extern pthread_cond_t unload_cond;     // car signals passengers to unboard    
 extern pthread_cond_t car_ready_cond;  // passenger signals car a rider joined 
@@ -85,18 +96,15 @@ extern sem_t loading_bay;              // only 1 car may be in load() at once
 extern int loading_open;               // 1 = car is accepting boarders           
 extern int unloading_open;             // 1 = car has signaled unload             
 extern int passengers_unboarded;       // number of passengers that have unboarded 
-
-extern CarState *car_states;
-extern int *car_load_counts;
  
 // Global simulation parameters
 extern SimParams sim;
 
-// logging arrays
+// part3: logging arrays
 extern int *ticket_queue;
 extern int *ride_queue;
  
-/* ─── Thread Argument Types ──────────────────────────────────────────── */
+/* --- Thread Argument Types ------------------------------------------------- */
 
 // Passenger type
 typedef struct {
@@ -113,6 +121,9 @@ typedef struct {
 // Utility Functions
 int  get_elapsed(void);
 void log_event(const char *fmt, ...);
+void log_system_state();
+void enqueue(pthread_mutex_t queue_type, int *queue, int size, int id);
+int dequeue(pthread_mutex_t queue_type, int *queue, int size);
  
 // Passenger Functions 
 void explore_park(int id);
@@ -128,7 +139,7 @@ void car_unload(int id);
  
 // Thread Behaviors 
 void *passenger_thread(void *arg);
-void *car_thread(void *arg);
+void *car_thread(void *arg); 
 void *monitor_thread();
  
 #endif 
